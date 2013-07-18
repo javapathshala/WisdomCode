@@ -4,8 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <title>Customer List View & Ajax - Spring Framework</title> 
-<link type="text/css" rel="stylesheet" href="/SPRING_WEB/stylesheets/jp.css"/>
-<link type="text/css" rel="stylesheet" href="/SPRING_WEB/stylesheets/newjp.css"/>
+<link type="text/css" rel="stylesheet" href="stylesheets/jp.css"/>
+<link type="text/css" rel="stylesheet" href="stylesheets/newjp.css"/>
  
 <script type="text/javascript" src="./javascript/ajaxHelper.js"></script>
 <body class="bodyNew">  

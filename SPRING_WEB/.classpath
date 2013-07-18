@@ -13,5 +13,9 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JP_COMMON"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JP_DATALOADER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JP_LUCENE"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SPRING_APP"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

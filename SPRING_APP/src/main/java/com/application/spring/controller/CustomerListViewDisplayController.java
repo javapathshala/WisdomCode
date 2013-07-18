@@ -1,3 +1,4 @@
+
 package com.application.spring.controller;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,11 +28,8 @@ import com.application.spring.forms.ViewCustomerForm;
 import com.application.spring.search.CustomerSearchService;
 import com.jp.application.common.AbstractDTO;
 
-
 @Controller
 public class CustomerListViewDisplayController {
-
-	private static final long serialVersionUID = 1384771688058566146L;
 
 	private String successView;
 
@@ -53,14 +52,15 @@ public class CustomerListViewDisplayController {
 	 */
 	@RequestMapping(value = "/CustomerListViewDisplay.do", params = "show", method = RequestMethod.GET)
 	public ModelAndView showList(
-			@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm)
-			throws Exception {
+		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm)
+		throws Exception {
+
 		populateFromRequestForm(viewCustomerForm);
 		getCustomerList();
 		populateToSuccessForm(viewCustomerForm, new ArrayList<AbstractDTO>(
-				customerList));
-		return new ModelAndView(getSuccessView(), "viewCustomerForm",
-				viewCustomerForm);
+			customerList));
+		return new ModelAndView(
+			getSuccessView(), "viewCustomerForm", viewCustomerForm);
 	}
 
 	/**
@@ -74,26 +74,29 @@ public class CustomerListViewDisplayController {
 	 */
 	@RequestMapping(value = "/CustomerListViewDisplay.do", params = "showAjax", method = RequestMethod.GET)
 	public ModelAndView showAjaxList(
-			@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
-			HttpServletRequest req, HttpServletResponse res) throws Exception {
+		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
+		HttpServletRequest req, HttpServletResponse res)
+		throws Exception {
+
 		populateFromRequestForm(viewCustomerForm);
 		String str = req.getParameter("str");
 		List<AbstractDTO> listSearch = getCustomerFomSearch(str);
 		populateToSuccessFormAjax(viewCustomerForm, res, listSearch);
-		return new ModelAndView(getSuccessView(), "viewCustomerForm",
-				viewCustomerForm);
+		return new ModelAndView(
+			getSuccessView(), "viewCustomerForm", viewCustomerForm);
 	}
 
 	@RequestMapping(value = "/CustomerListViewDisplay.do", params = "showCustButton", method = RequestMethod.POST)
 	public ModelAndView showCustButton(
-			@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
-			HttpServletRequest request, HttpServletResponse res)
-			throws Exception {
+		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
+		HttpServletRequest request, HttpServletResponse res)
+		throws Exception {
+
 		populateFromRequestForm(viewCustomerForm);
 		List<AbstractDTO> listSearch = getCustomerFomSearch(searchQuery);
 		populateToSuccessForm(viewCustomerForm, listSearch);
-		return new ModelAndView(getSuccessView(), "viewCustomerForm",
-				viewCustomerForm);
+		return new ModelAndView(
+			getSuccessView(), "viewCustomerForm", viewCustomerForm);
 	}
 
 	/**
@@ -106,8 +109,10 @@ public class CustomerListViewDisplayController {
 	 */
 	@RequestMapping(value = "/CustomerListViewDisplay.do", params = "showSort", method = RequestMethod.GET)
 	public ModelAndView showSortScreen(
-			@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
-			HttpServletRequest request) throws Exception {
+		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
+		HttpServletRequest request)
+		throws Exception {
+
 		populateFromRequestForm(viewCustomerForm);
 		searchQuery = request.getParameter("sea");
 		List<AbstractDTO> listSearch = getCustomerFomSearch(searchQuery);
@@ -119,9 +124,10 @@ public class CustomerListViewDisplayController {
 		// CustomerList newcustList=new CustomerList(asList);
 		listSearch = sortListByIden(listSearch, sortOrder);
 		populateToSuccessForm(viewCustomerForm, listSearch);
-		return new ModelAndView(getSuccessView(), "viewCustomerForm",
-				viewCustomerForm);
+		return new ModelAndView(
+			getSuccessView(), "viewCustomerForm", viewCustomerForm);
 	}
+	
 
 	/**
 	 * Set the builder properties from the form bean
@@ -130,6 +136,7 @@ public class CustomerListViewDisplayController {
 	 * @throws FrameworkSystemException
 	 */
 	public void populateFromRequestForm(ViewCustomerForm viewCustomerForm) {
+
 		searchQuery = viewCustomerForm.getCustomerNameFilter();
 	}
 
@@ -139,12 +146,14 @@ public class CustomerListViewDisplayController {
 	 * @throws FrameworkSystemException
 	 * @throws FrameworkUserException
 	 */
-	private void getCustomerList() throws Exception {
+	private void getCustomerList()
+		throws Exception {
+
 		DataLoaderImpl dataloader = new DataLoaderImpl();
 		customerList = dataloader.loadData();
 		// Store the results in lucene cache
 		customerSearchService.storeResultsInCache(new ArrayList<AbstractDTO>(
-				customerList));
+			customerList));
 	}
 
 	/**
@@ -154,8 +163,9 @@ public class CustomerListViewDisplayController {
 	 * @param listSearch
 	 * @throws FrameworkSystemException
 	 */
-	public void populateToSuccessForm(ViewCustomerForm viewCustomerForm,
-			List<AbstractDTO> listSearch) {
+	public void populateToSuccessForm(
+		ViewCustomerForm viewCustomerForm, List<AbstractDTO> listSearch) {
+
 		// CustomerList customerList = builder.getCustomerList();
 		if (null != listSearch) {
 			// populating the table
@@ -179,11 +189,14 @@ public class CustomerListViewDisplayController {
 	 * Get the customerList from the lucene cache
 	 */
 	private List<AbstractDTO> getCustomerFomSearch(String searchQuery) {
+
 		return customerSearchService.passResultsFromCache(searchQuery);
 	}
 
-	public void populateToSuccessFormAjax(ViewCustomerForm viewCustomerForm,
-			HttpServletResponse res, List<AbstractDTO> listSearch) {
+	public void populateToSuccessFormAjax(
+		ViewCustomerForm viewCustomerForm, HttpServletResponse res,
+		List<AbstractDTO> listSearch) {
+
 		String responseText = "";
 		if (null != listSearch) {
 			// populating the table
@@ -195,9 +208,11 @@ public class CustomerListViewDisplayController {
 				String customerName = customer.getCustomerName();
 				if (i == 0) {
 					responseText = customerName + ",";
-				} else if (i == 1) {
+				}
+				else if (i == 1) {
 					responseText = responseText + customerName;
-				} else {
+				}
+				else {
 					responseText = responseText + "," + customerName;
 				}
 				i++;
@@ -218,39 +233,46 @@ public class CustomerListViewDisplayController {
 			out.println(responseText);
 			out.flush();
 			out.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
 	public String getFailureView() {
+
 		return failureView;
 	}
 
 	public void setFailureView(String failureView) {
+
 		this.failureView = failureView;
 	}
 
 	public String getSuccessView() {
+
 		return successView;
 	}
 
 	public void setSuccessView(String successView) {
+
 		this.successView = successView;
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<AbstractDTO> sortListByIden(List<AbstractDTO> custList,
-			String sortOrder) {
-		CustomerListIdentifierComparator customerListIdentifierComparator = new CustomerListIdentifierComparator(
-				sortOrder);
+	private List<AbstractDTO> sortListByIden(
+		List<AbstractDTO> custList, String sortOrder) {
+
+		CustomerListIdentifierComparator customerListIdentifierComparator =
+			new CustomerListIdentifierComparator(sortOrder);
 		Collections.sort(custList, customerListIdentifierComparator);
 		return custList;
 	}
 
 	@Deprecated
 	public void setServletURI(javax.servlet.http.HttpServletRequest request) {
+
 		String scheme = request.getScheme();
 		String host = request.getServerName();
 		String port = Integer.toString(request.getServerPort());
