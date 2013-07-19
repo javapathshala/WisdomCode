@@ -19,17 +19,16 @@ public class LoginDisplayController {
 
 	}
 
-	@RequestMapping(value = "/loginfailed.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/LoginDisplay.do" ,params = "loginError", method = RequestMethod.GET)
 	public String loginerror(ModelMap model) {
-
 		model.addAttribute("error", "true");
 		return getSuccessView();
 	}
 
-	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/LoginDisplay.do", params="logout", method = RequestMethod.GET)
 	public String logout(ModelMap model) {
 
-		return getSuccessView();
+		return "Welcome";
 	}
 
 	public String getSuccessView() {

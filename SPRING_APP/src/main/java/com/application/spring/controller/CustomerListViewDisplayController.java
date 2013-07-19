@@ -3,6 +3,7 @@ package com.application.spring.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,9 +53,12 @@ public class CustomerListViewDisplayController {
 	 */
 	@RequestMapping(value = "/CustomerListViewDisplay.do", params = "show", method = RequestMethod.GET)
 	public ModelAndView showList(
-		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm)
+		@ModelAttribute("viewCustomerForm") ViewCustomerForm viewCustomerForm,
+		Principal principal, Model model)
 		throws Exception {
 
+		String name = principal.getName();
+		model.addAttribute("username", name);
 		populateFromRequestForm(viewCustomerForm);
 		getCustomerList();
 		populateToSuccessForm(viewCustomerForm, new ArrayList<AbstractDTO>(
@@ -127,7 +131,6 @@ public class CustomerListViewDisplayController {
 		return new ModelAndView(
 			getSuccessView(), "viewCustomerForm", viewCustomerForm);
 	}
-	
 
 	/**
 	 * Set the builder properties from the form bean

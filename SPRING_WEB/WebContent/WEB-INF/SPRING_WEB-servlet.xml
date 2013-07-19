@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/mvc">
 
 	<context:annotation-config />
-	<!-- mvc:resources mapping="/resources/**" location="/images/, /stylesheets/" /-->
-	
+	<!-- mvc:resources mapping="/resources/**" location="/images/, /stylesheets/" 
+		/ -->
+
 	<bean id="urlMapping"
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
-				<prop key="Test">Test</prop>
+				<prop key="Welcome.do">Welcome</prop>
 				<prop key="CustomerListViewDisplay.do">CustomerListViewDisplay</prop>
 				<prop key="LoginDisplay.do">LoginDisplay</prop>
 			</props>
 		</property>
 	</bean>
-	<bean id="Test" class="com.application.spring.controller.Test">
-		<property name="successView" value="Test" />
+	<bean id="Welcome" class="com.application.spring.controller.WelcomeController">
+		<property name="successView" value="Welcome" />
 	</bean>
 	<bean id="CustomerListViewDisplay"
 		class="com.application.spring.controller.CustomerListViewDisplayController">
@@ -28,10 +28,11 @@
 		<property name="failureView" value="loginPage" />
 	</bean>
 
-	<bean id="LoginDisplay" class="com.application.spring.controller.LoginDisplayController">
+	<bean id="LoginDisplay"
+		class="com.application.spring.controller.LoginDisplayController">
 		<property name="successView" value="loginPage" />
 	</bean>
-	
+
 
 
 	<bean id="jstlViewResolver" class="com.application.spring.util.JstlViewResolver">

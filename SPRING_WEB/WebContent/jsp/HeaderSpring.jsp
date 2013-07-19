@@ -41,7 +41,12 @@
 					<A href="" class="breadcrumbNav" alt="Home" >	 <img src="images/buttons/loginNew.gif" border="0"/>  </A></SPAN></TD>
 
 						<TD height="10">&nbsp;&nbsp;&nbsp;  <SPAN class="breadcrumb">SymlSee Consultants</SPAN>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fsdfd
+		<c:if test="${not empty username}">
+		Username : ${username}</h3>
+		</c:if>						
+		
+	
 						</TD>
 						<TD height="10" class="ar" width="27%"><SPAN class="breadcrumb">
 						<%
@@ -51,7 +56,17 @@
 						%>
 						 <SPAN class="breadcrumb"> <%= dateString  %>
 						</SPAN>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-						<SPAN class="breadcrumb"> <A href="" class="login_out_registerNAV" alt="Logout"><img src="images/buttons/logoutNew.gif" border="0"/> </A> </SPAN>
+						<SPAN class="breadcrumb"> 
+						
+							 
+						<a href="<c:url value="/j_spring_security_logout" />" >
+						
+						<img src="images/buttons/logoutNew.gif" border="0"/> 
+						
+						
+						</A>
+						
+						 </SPAN>
 						</SPAN></TD>
 						<TD height="10" width="2%"><IMG src="images/lines/spacer.gif"
 							width="20" height="10" alt=""></TD>
