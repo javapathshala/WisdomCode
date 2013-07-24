@@ -1,52 +1,100 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <title>Login Page</title>
-<style>
-.errorblock {
-	color: #ff0000;
-	background-color: #ffEEEE;
-	border: 3px solid #ff0000;
-	padding: 8px;
-	margin: 16px;
-}
-</style>
 </head>
-<body onload='document.f.j_username.focus();'>
-	<h3>Login with Username and Password (Custom Page)</h3>
 
-	<c:if test="${not empty error}">
-		<div class="errorblock">
-			Your login attempt was not successful, try again.<br /> Caused :
-			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-		</div>
-	</c:if>
+<link type="text/css" rel="stylesheet" href="stylesheets/jp.css" />
+<link type="text/css" rel="stylesheet" href="stylesheets/newjp.css" />
 
-	<form name='f' action="<c:url value='j_spring_security_check' />"
-		method='POST'>
+<script type="text/javascript" src="./javascript/ajaxHelper.js"></script>
+<body class="bodyNew" onload='document.f.j_username.focus();'>
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<tr>
+			<td colspan="3"><jsp:include page="/jsp/HeaderSpring.jsp"
+					flush="true" /></td>
+		</tr>
+	</table>
 
-		<table>
-			<tr>
-				<td>User:</td>
-				<td><input type='text' name='j_username' value=''>
-				</td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type='password' name='j_password' />
-				</td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="submit" type="submit"
-					value="submit" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="reset" type="reset" />
-				</td>
-			</tr>
-		</table>
+	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<td valign="top"><%@ include file="/jsp/navBar.jsp"%>
+			</td>
+			<td class="vt" width="100%"><c:url value="/LoginDisplay.do"
+					var="loginUrl" /> <!-- form:form
+					method="post" commandName="viewCustomerForm"
+					action="CustomerListViewDisplay.do?showCustButton=true"
+					name="viewCustomerForm"--> <form:form method="post"
+					action="${loginUrl}" name="loginForm" commandName="loginForm">
 
-	</form>
+					<div class="header">
+						Spring Framework Demo by Smylee Consultants!!
+						<%=request.getSession().getId()%></div>
+					<br />
+					<form:errors path="*" element="div" cssClass="errorbgc" />
+					<c:if test="${not empty error}">
+						<div class="errorbgc">
+							Your login attempt was not successful, try again.<br /> Caused :
+							${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+						</div>
+					</c:if>
+
+
+
+					<table class="filter" cellpadding="2" cellspacing="5" border="0"
+						width="100%">
+						<tr>
+							<td class="normalar" width="20%"><label for="username">Username</label></td>
+							<td width="20%"><form:input path="j_username" /></td>
+						</tr>
+						<tr>
+							<td class="normalar" width="20%"><label for="password">Password</label></td>
+							<td width="20%"><form:password path="j_password" /></td>
+						</tr>
+						<tr>
+							<td class="normalar" width="20%"><input id="submit"
+								class="btn" name="submit" type="submit" value="Login" /></td>
+							<td width="20%"></td>
+						</tr>
+
+					</table>
+				</form:form></td>
+		</tr>
+	</table>
+
 </body>
+
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,7 +14,7 @@
 	<properties>
 		<spring.version>3.1.1.RELEASE</spring.version>
 	</properties>
-	
+
 	<dependencies>
 
 
@@ -58,19 +58,19 @@
 		</dependency>
 		<!-- Web end -->
 
-<!-- Spring Security -->
+		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
@@ -79,7 +79,12 @@
 		<!-- Spring Dependencies End -->
 
 
-
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.1.0.Final</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>JAVA_PATHSHALA</groupId>

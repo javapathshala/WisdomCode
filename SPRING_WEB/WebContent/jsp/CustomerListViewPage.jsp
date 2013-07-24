@@ -24,7 +24,7 @@
 			</td>
 			<td class="vt" width="100%" >
 				<form:form method="post" commandName="viewCustomerForm" action="CustomerListViewDisplay.do?showCustButton=true" name="viewCustomerForm">
-					<div class="header">Spring Framework Demo by Smylee Consultants!!</div><br/>			
+					<div class="header">Spring Framework Demo by Smylee Consultants!! <%=request.getSession().getId() %></div><br/>			
 					<div class="errorbgc">${viewCustomerForm.errorField }  </div>												
 					<table class="filter" cellpadding="2" cellspacing="5" border="0" width="100%">
 						<tr>

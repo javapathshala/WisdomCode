@@ -25,8 +25,9 @@ import javax.ws.rs.core.MediaType;
 public class Hello {
 
 	// This method is called if TEXT_PLAIN is request
-	@GET
+	@GET	
 	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/dimit")
 	public String sayPlainTextHello() {
 		return "Hello Jersey";
 	}

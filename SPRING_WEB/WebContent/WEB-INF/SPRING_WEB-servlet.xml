@@ -13,11 +13,16 @@
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
+				<prop key="Test.do">Test</prop>
 				<prop key="Welcome.do">Welcome</prop>
 				<prop key="CustomerListViewDisplay.do">CustomerListViewDisplay</prop>
 				<prop key="LoginDisplay.do">LoginDisplay</prop>
 			</props>
 		</property>
+	</bean>
+
+	<bean id="Test" class="com.application.spring.controller.Test">
+		<property name="successView" value="Test" />
 	</bean>
 	<bean id="Welcome" class="com.application.spring.controller.WelcomeController">
 		<property name="successView" value="Welcome" />
@@ -45,7 +50,7 @@
 
 	<bean id="customerSearchService" class="com.application.spring.search.CustomerSearchServiceImpl" />
 
-
+	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
@@ -55,10 +60,4 @@
 		</property>
 	</bean>
 
-	<!-- Logging Method Intercepter Starts> <bean name="methodLoggingInterceptor" 
-		class="com.application.spring.Interceptor.logging.MethodLoggingInterceptor"/> 
-		<bean name="proxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"> 
-		<property name="beanNames"> <list> <value>*</value> </list> </property> <property 
-		name="interceptorNames"> <list> <value>methodLoggingInterceptor</value> </list> 
-		</property> </bean> <Logging Method Intercepter Ends -->
 </beans>

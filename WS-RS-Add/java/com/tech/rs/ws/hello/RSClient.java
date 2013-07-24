@@ -35,7 +35,7 @@ public class RSClient {
 				MediaType.TEXT_PLAIN).get(ClientResponse.class);
 		System.out.println(clientResponse.getStatus());
 		// Get plain text
-		System.out.println(service.path("rest").path("hello").accept(
+		System.out.println(service.path("rest").path("hello/dimit").accept(
 				MediaType.TEXT_PLAIN).get(String.class));
 		// Get XML
 		System.out.println(service.path("rest").path("hello").accept(
