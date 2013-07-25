@@ -3,12 +3,12 @@
 	<classpathentry kind="src" path="java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JP_DATALOADER"/>
-	<classpathentry kind="lib" path="datafile.jar"/>
-	<classpathentry kind="lib" path="ehcache-core-2.3.2.jar"/>
-	<classpathentry kind="lib" path="ehcache-terracotta-2.3.2.jar"/>
-	<classpathentry kind="lib" path="log4j-1.2.11.jar"/>
-	<classpathentry kind="lib" path="slf4j-api-1.5.11.jar"/>
-	<classpathentry kind="lib" path="slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/datafile.jar"/>
+	<classpathentry kind="lib" path="lib/ehcache-core-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/ehcache-terracotta-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.11.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
