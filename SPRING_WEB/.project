@@ -3,7 +3,6 @@
 	<name>SPRING_WEB</name>
 	<comment></comment>
 	<projects>
-		<project>JP_LUCENE</project>
 		<project>JP_COMMON</project>
 		<project>JP_DATALOADER</project>
 		<project>SPRING_APP</project>

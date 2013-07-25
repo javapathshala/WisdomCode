@@ -21,6 +21,7 @@
 		<module>../SPRING_WEB</module>
 		<module>../HIBERNATE_APP</module>
 		<module>../HIBERNATE_CACHING</module>
+		<module>JP_LUCENE</module>
 	</modules>
 
 	<dependencies>

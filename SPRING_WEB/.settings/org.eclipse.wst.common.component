@@ -3,9 +3,6 @@
     <wb-module deploy-name="SPRING_WEB">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="JP_LUCENE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_LUCENE/JP_LUCENE">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="JP_COMMON.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_COMMON/JP_COMMON">
             <dependency-type>uses</dependency-type>
         </dependent-module>
