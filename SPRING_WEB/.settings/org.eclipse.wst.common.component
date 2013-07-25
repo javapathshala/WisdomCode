@@ -12,6 +12,9 @@
         <dependent-module archiveName="SPRING_APP.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/SPRING_APP/SPRING_APP">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="JP_LUCENE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_LUCENE/JP_LUCENE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="SPRING_WEB"/>
         <property name="java-output-path" value="/SPRING_WEB/build/classes"/>
     </wb-module>

@@ -5,6 +5,7 @@
 	<projects>
 		<project>JP_COMMON</project>
 		<project>JP_DATALOADER</project>
+		<project>JP_LUCENE</project>
 		<project>SPRING_APP</project>
 	</projects>
 	<buildSpec>

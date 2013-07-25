@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	
+	<security:http security="none" pattern="/images/**" />
+	<security:http security="none" pattern="/stylesheets/**" />
+	<security:http security="none" pattern="/javascript/**" />
+
+	<security:http auto-config="true" use-expressions="true">
+		<!-- For all pages behind security use /** -->
+		<security:intercept-url pattern="/Welcome.do" access="permitAll" />
+		<security:intercept-url pattern="/LoginDisplay.do" access="permitAll" />
+		<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+		<security:form-login login-page="/LoginDisplay.do" default-target-url="/CustomerListViewDisplay.do" />
+		<security:logout logout-success-url="/Welcome.do" />
+	</security:http>
+
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="admin" password="admin" authorities="ROLE_USER" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler" />
+	
+	<!-- bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"> 
+		<property name="permissionEvaluator"> <bean class="messages.security.MessagePermissionEvaluator" /> </property> </bean -->
+
+</beans>
