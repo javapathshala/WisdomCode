@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- Beans Declaration -->
+	<bean id="FirstTask" class="com.jp.quartz.spring.tasks.FirstTask"></bean>
+	<bean id="SecondTask" class="com.jp.quartz.spring.tasks.SecondTask"></bean>
+
+	<bean id="SchedulerService" class="com.jp.quartz.spring.basic.SchedulerService">
+		<property name="firstTask" ref="FirstTask" />
+		<property name="secondTask" ref="SecondTask" />
+	</bean>
+
+	<!-- Job Detail -->
+	<bean id="FirstTaskJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SchedulerService" />
+		<property name="targetMethod" value="executeFirstTask" />
+	</bean>
+
+	<bean id="SecondTaskJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SchedulerService" />
+		<property name="targetMethod" value="executeSecondTask" />
+	</bean>
+
+	<!-- Simple Trigger -->
+	<bean id="FirstSimpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="FirstTaskJobDetail" />
+		<property name="repeatInterval" value="5000" />
+		<property name="startDelay" value="1000" />
+	</bean>
+	<!-- <bean id="SecondSimpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> 
+		<property name="jobDetail" ref="SecondTaskJobDetail" /> <property name="repeatInterval" 
+		value="12000" /> <property name="startDelay" value="1000" /> </bean> -->
+	<!-- Cron Trigger -->
+	<bean id="SecondSimpleTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="SecondTaskJobDetail" />
+		<property name="cronExpression" value="0/12 * * * * ?" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="FirstTaskJobDetail" />
+				<ref bean="SecondTaskJobDetail" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="FirstSimpleTrigger" />
+				<ref bean="SecondSimpleTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
