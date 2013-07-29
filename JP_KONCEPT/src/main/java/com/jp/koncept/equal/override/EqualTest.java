@@ -6,12 +6,11 @@
  */
 package com.jp.koncept.equal.override;
 
-
 /**
  * @author dimit
  * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ *         To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class EqualTest {
 
@@ -22,6 +21,11 @@ public class EqualTest {
 			System.out.println("one and two are equal");
 		} else {
 			System.out.println("one and two are not equal");
+			if (one == two) {
+				System.out.println("one and two are equal");
+			} else {
+				System.out.println("one and two are not equal");
+			}
 		}
 	}
 }
