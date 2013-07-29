@@ -22,13 +22,13 @@ public class Employee implements Cloneable {
 	private String name;
 
 	private String designation;
-	
+
 	private Department dept;
 
 	public Employee() {
 		this.setDesignation("Architect");
 		this.setName("Dimit Chadha");
-		this.dept=new Department();		
+		this.dept = new Department();
 	}
 
 	public String getDesignation() {
@@ -47,7 +47,6 @@ public class Employee implements Cloneable {
 		this.name = name;
 	}
 
-	
 	/**
 	 * @return the dept
 	 */
@@ -55,9 +54,9 @@ public class Employee implements Cloneable {
 		return dept;
 	}
 
-	
 	/**
-	 * @param dept the dept to set
+	 * @param dept
+	 *            the dept to set
 	 */
 	public void setDept(Department dept) {
 		this.dept = dept;
@@ -71,4 +70,16 @@ public class Employee implements Cloneable {
 		 */
 		return super.clone();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Employee [name=" + name + ", designation=" + designation
+				+ ", dept=" + dept + "]";
+	}
+
 }

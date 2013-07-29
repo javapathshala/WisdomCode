@@ -56,6 +56,14 @@ public class Department {
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Department [deptId=" + deptId + ", deptName=" + deptName + "]";
+	}
 	
 	
 
