@@ -4,22 +4,23 @@ public class OuterClass {
 
 	private String str = "Outer-String";
 
-	public static void main(String[] args) {
-		OuterClass outerClass = new OuterClass();
-		outerClass.printStr();
-		InnerClass innerClass = outerClass.new InnerClass();
-		innerClass.innerMethod();
-	}
-
 	private void printStr() {
 		System.out.println(str);
 	}
 
 	class InnerClass {
 		public void innerMethod() {
-			str = "Inner-String";
+			String str = "Inner-String";
 			System.out.println(str);
+			System.out.println(OuterClass.this.str);
 		}
+	}
+
+	public static void main(String[] args) {
+		OuterClass outerClass = new OuterClass();
+		outerClass.printStr();
+		InnerClass innerClass = outerClass.new InnerClass();
+		innerClass.innerMethod();
 	}
 
 }
