@@ -13,4 +13,12 @@ class Food {
 			System.out.println("m2");
 		}
 	};
+	
+	public static void main(String args[]){
+		Food food=new Food();
+		food.in.pop();
+		AnonymousInnerClass an=new AnonymousInnerClass();
+		an.pop();
+				
+	}
 }
