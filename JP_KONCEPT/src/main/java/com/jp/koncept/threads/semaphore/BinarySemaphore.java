@@ -57,7 +57,7 @@ public class BinarySemaphore {
 			ie.printStackTrace();
 		} finally {
 			binary.release();
-			System.out.println(Thread.currentThread().getName() + " outside of mutual exclusive region");
+		System.out.println(Thread.currentThread().getName() + " outside of mutual exclusive region");
 		}
 	}
 }
