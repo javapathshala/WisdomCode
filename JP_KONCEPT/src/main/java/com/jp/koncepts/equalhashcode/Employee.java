@@ -29,23 +29,23 @@ public class Employee {
 		return name;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		Employee emp = (Employee) obj;
-		if (this.name == emp.name) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (obj == null) {
+//			return false;
+//		}
+//		if (obj.getClass() != getClass()) {
+//			return false;
+//		}
+//		Employee emp = (Employee) obj;
+//		if (this.name == emp.name) {
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		return name.hashCode();
+//	}
 }

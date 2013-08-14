@@ -23,6 +23,17 @@ public class TestTree {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
+		// Normal Tree
+		TreeSet<String> tree = new TreeSet<String>();
+		tree.add("Dimit");
+		tree.add("Chadha");
+		tree.add("Dimit");
+		Iterator<String> itr = tree.iterator();
+		while (itr.hasNext()) {
+			System.out.println(itr.next());
+		}
+
 		Employee emp = new Employee(23, "dc", "dc");
 		TreeSet<Employee> t1 = new TreeSet<Employee>();
 

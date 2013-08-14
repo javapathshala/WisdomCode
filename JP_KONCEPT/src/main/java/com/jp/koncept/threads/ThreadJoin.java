@@ -22,21 +22,26 @@ public class ThreadJoin implements Runnable {
 		t1.start();
 		t2.start();
 		t3.start();
-		t1.join();
+		t2.join();
 
 	}
 
 	public void run() {
-		for (int x = 1; x <= 10; x++) {
-			System.out.println("This is Thread No : "
-					+ Thread.currentThread().getName() + " :: Count :: " + x);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		System.out.println(Thread.currentThread().getName() + " is Started");
+		try {
+			for (int x = 1; x <= 5; x++) {
+				System.out.println("This is Thread No : "
+						+ Thread.currentThread().getName() + " :: Count :: "
+						+ x);
+				Thread.sleep(2000);
+				System.out.println(Thread.currentThread().getName()
+						+ " is Completed");
 
+				
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

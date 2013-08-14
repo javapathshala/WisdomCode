@@ -31,6 +31,19 @@ public class SimpleJoin {
 			public void run() {
 				try {
 					System.out.println(Thread.currentThread().getName() + " is Started");
+					Thread.sleep(2000000);
+					System.out.println(Thread.currentThread().getName() + " is Completed");
+				} catch (InterruptedException ex) {
+					System.out.println(ex);
+				}
+			}
+		};
+		Thread exampleThread2 = new Thread() {
+
+			public void run() {
+				try {
+					System.out.println(Thread.currentThread().getName() + " is Started");
+					System.out.println(Thread.currentThread().getName() + " is working now because of join");
 					Thread.sleep(2000);
 					System.out.println(Thread.currentThread().getName() + " is Completed");
 				} catch (InterruptedException ex) {
@@ -39,8 +52,13 @@ public class SimpleJoin {
 			}
 		};
 
+//		exampleThread.start();
+//		exampleThread.join();
 		exampleThread.start();
-		exampleThread.join();
+		exampleThread2.start();
+		exampleThread2.join();
+
+		//exampleThread.join();
 
 		System.out.println(Thread.currentThread().getName() + " is Completed");
 	}
