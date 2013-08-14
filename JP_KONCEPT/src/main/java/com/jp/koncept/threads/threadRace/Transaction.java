@@ -49,12 +49,15 @@ class Transaction extends Thread {
 	}
 
 	public void run() {
+		System.out.println(Thread.currentThread().getName() + " is running ");
 		switch (this.transactionType) {
 			case DEPOSIT:
+				System.out.println(Thread.currentThread().getName() + " is depositing ");
 				deposit();
 				printBalance();
 				break;
 			case WITHDRAW:
+				System.out.println(Thread.currentThread().getName() + " is withdrawing ");
 				withdraw();
 				printBalance();
 				break;

@@ -42,6 +42,7 @@ public class Account {
 			return false;
 		} else {
 			accountBalance = accountBalance + amount;
+			System.out.println("New Deposite : "+accountBalance);
 			return true;
 		}
 	}
@@ -53,6 +54,7 @@ public class Account {
 			return false;
 		} else {
 			accountBalance = accountBalance - amount;
+			System.out.println("New withdraw : "+accountBalance);
 			return true;
 		}
 	}
