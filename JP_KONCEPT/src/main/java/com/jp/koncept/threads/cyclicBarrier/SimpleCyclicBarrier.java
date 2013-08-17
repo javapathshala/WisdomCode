@@ -1,16 +1,12 @@
 /*
- * File: SimpleLatch.java
- * Date: 11-Jul-2013
- *
- * This source code is part of Java Pathshala-Wisdom Being Shared.
- * This program is protected by copyright law but you are authorise to learn 
- * & gain ideas from it. Its unauthorised use is explicitly prohibited & any 
- * addition & removal of material. If want to suggest any changes,
- * you are welcome to provide your comments on GitHub Social Code Area.
- * Its unauthorised use gives Java Pathshala the right to obtain retention orders
- * and to prosecute the authors of any infraction.
- * 
- * Visit us at www.javapathshala.com
+ * File: SimpleLatch.java Date: 11-Jul-2013 This source code is part of Java
+ * Pathshala-Wisdom Being Shared. This program is protected by copyright law but
+ * you are authorise to learn & gain ideas from it. Its unauthorised use is
+ * explicitly prohibited & any addition & removal of material. If want to
+ * suggest any changes, you are welcome to provide your comments on GitHub
+ * Social Code Area. Its unauthorised use gives Java Pathshala the right to
+ * obtain retention orders and to prosecute the authors of any infraction. Visit
+ * us at www.javapathshala.com
  */
 package com.jp.koncept.threads.cyclicBarrier;
 
@@ -35,13 +31,8 @@ public class SimpleCyclicBarrier { // Runnable task for each thread
 				System.out.println(Thread.currentThread().getName() + " is waiting on barrier");
 				barrier.await();
 				System.out.println(Thread.currentThread().getName() + " has crossed the barrier");
-	
 			} catch (InterruptedException ex) {
-				// Logger.getLogger(CyclicBarrierExample.class.getName()).log(Level.SEVERE,
-				// null, ex);
 			} catch (BrokenBarrierException ex) {
-				// Logger.getLogger(CyclicBarrierExample.class.getName()).log(Level.SEVERE,
-				// null, ex);
 			}
 		}
 	}
@@ -54,8 +45,7 @@ public class SimpleCyclicBarrier { // Runnable task for each thread
 
 			public void run() {
 				// This task will be executed once all thread reaches barrier
-				System.out.println("All parties are arrived at barrier, lets play");
-			
+				System.out.println("All parties are arrived at barrier, lets play now !!!!!!!!!!!!");
 			}
 		});
 
