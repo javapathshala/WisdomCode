@@ -1,16 +1,12 @@
 /*
- * File: ReentrantLocking.java
- * Date: 18-Mar-2013
- *
- * This source code is part of Java Pathshala-Wisdom Being Shared.
- * This program is protected by copyright law but you are authorise to learn 
- * & gain ideas from it. Its unauthorised use is explicitly prohibited & any 
- * addition & removal of material. If want to suggest any changes,
- * you are welcome to provide your comments on GitHub Social Code Area.
- * Its unauthorised use gives Java Pathshala the right to obtain retention orders
- * and to prosecute the authors of any infraction.
- * 
- * Visit us at www.javapathshala.com
+ * File: ReentrantLocking.java Date: 18-Mar-2013 This source code is part of
+ * Java Pathshala-Wisdom Being Shared. This program is protected by copyright
+ * law but you are authorise to learn & gain ideas from it. Its unauthorised use
+ * is explicitly prohibited & any addition & removal of material. If want to
+ * suggest any changes, you are welcome to provide your comments on GitHub
+ * Social Code Area. Its unauthorised use gives Java Pathshala the right to
+ * obtain retention orders and to prosecute the authors of any infraction. Visit
+ * us at www.javapathshala.com
  */
 package com.jp.koncept.threads.reentrantlock;
 
@@ -24,7 +20,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLocking {
 
 	final Lock lock = new ReentrantLock(); // no fairness
-	//final Lock lock = new ReentrantLock(true); // fairness
+
+	// final Lock lock = new ReentrantLock(true); // fairness
 	/**
 	 * @param args
 	 */
@@ -38,7 +35,7 @@ public class ReentrantLocking {
 	 */
 	private void goAhead() {
 		new Thread(newRunable(), "Thread1").start();
-		new Thread(newRunable(), "Thread1").start();
+		new Thread(newRunable(), "Thread2").start();
 	}
 
 	/**
@@ -60,7 +57,8 @@ public class ReentrantLocking {
 							}
 							break;
 						} else {
-							System.out.println("unable to lock thread " + Thread.currentThread().getName() + " will re try again");
+							System.out.println("unable to lock thread as this thread is still sleeping" + Thread.currentThread().getName()
+									+ " will re try again");
 						}
 
 					} catch (InterruptedException e) {
