@@ -37,23 +37,21 @@ public class ThreadNotification {
                     Logger.getLogger(ThreadNotification.class.getName()).
                            log(Level.SEVERE, null, ex);
                 }
-                System.out.println(Thread.currentThread() + " finished Execution");
+                System.out.println(Thread.currentThread() + " finished Execution of waited object");
             }
         };
       
         Runnable notifyTask = new Runnable(){
-      
-            
             public void run(){
             	threadNotification.go();
-                System.out.println(Thread.currentThread() + " finished Execution");
+                System.out.println(Thread.currentThread() + " finished Execution of notify thread");
             }
         };
       
-        Thread t1 = new Thread(waitTask, "WT1"); //will wait
-        Thread t2 = new Thread(waitTask, "WT2"); //will wait
-        Thread t3 = new Thread(waitTask, "WT3"); //will wait
-        Thread t4 = new Thread(notifyTask,"NT1"); //will notify
+        Thread t1 = new Thread(waitTask, "WT-1"); //will wait
+        Thread t2 = new Thread(waitTask, "WT-2"); //will wait
+        Thread t3 = new Thread(waitTask, "WT-3"); //will wait
+        Thread t4 = new Thread(notifyTask,"NT-1"); //will notify
       
         //starting all waiting thread
         t1.start();
@@ -61,7 +59,7 @@ public class ThreadNotification {
         t3.start();
       
         //pause to ensure all waiting thread started successfully
-        Thread.sleep(200);
+        Thread.sleep(600);
       
         //starting notifying thread
         t4.start();
@@ -71,11 +69,11 @@ public class ThreadNotification {
      * wait and notify can only be called from synchronized method or bock
      */
     private synchronized void shouldGo() throws InterruptedException {
-        while(go != true){
+        while(!go){
             System.out.println(Thread.currentThread()
                          + " is going to wait on this object");
-            wait(); //release lock and reacquires on wakeup
-            System.out.println(Thread.currentThread() + " is woken up");
+            wait(); //release lock and re-acquires on wake up
+            System.out.println(Thread.currentThread() + " is woken up because notify was called.");
         }
         go = false; //resetting condition
     }
@@ -84,13 +82,13 @@ public class ThreadNotification {
      * both shouldGo() and go() are locked on current object referenced by "this" keyword
      */
     private synchronized void go() {
-        while (go == false){
+        while (!go){
             System.out.println(Thread.currentThread()
             + " is going to notify all or one thread waiting on this object");
             go = true; //making condition true for waiting thread
             //notify(); // only one out of three waiting thread WT1, WT2,WT3 will woke up
 			//notifyAll(); // all waiting thread  WT1, WT2,WT3 will woke up
-            notify();
+            notifyAll();
         }
       
     }
