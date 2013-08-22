@@ -1,5 +1,5 @@
 /*
- * File: SingletonException.java
+ * File: SingletonPatternBasic.java
  * Date: 14-Jun-2012
  *
  * This source code is part of Java Pathshala-Wisdom Being Shared.
@@ -12,21 +12,28 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.singleton;
+package com.jp.design.pattern.create.singleton;
 
 /**
  * @author dimit.chadha
  */
-public class SingletonException extends RuntimeException {
+public class SingletonPatternBasic {
 
-	private static final long serialVersionUID = 8591868570906908947L;
+	// Private Constructor
+	private SingletonPatternBasic() {
 
-	public SingletonException() {
-		super();
 	}
 
-	public SingletonException(String str) {
-		super(str);
+	private static SingletonPatternBasic instance;
+
+	public static SingletonPatternBasic getInstance() throws SingletonException {
+		if (instance == null) {
+			instance = new SingletonPatternBasic();
+		} else {
+			throw new SingletonException("Only One intance of SingleTonPattern Object is allowed! No Two instances can co-exists");
+			
+		}
+		return instance;
 	}
 
 }

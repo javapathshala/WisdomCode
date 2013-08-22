@@ -8,7 +8,7 @@
  * obtain retention orders and to prosecute the authors of any infraction. Visit
  * us at www.javapathshala.com
  */
-package com.jp.design.pattern.singleton;
+package com.jp.design.pattern.create.singleton;
 
 /**
  * @author dimit.chadha

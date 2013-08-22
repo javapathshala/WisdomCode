@@ -1,4 +1,4 @@
-package com.jp.design.pattern.factory;
+package com.jp.design.pattern.create.factory;
 
 public class RunFactoryPattern {
 

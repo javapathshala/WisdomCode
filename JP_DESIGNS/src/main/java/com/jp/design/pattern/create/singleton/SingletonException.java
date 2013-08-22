@@ -1,6 +1,6 @@
 /*
- * File: ISqaurePeg.java
- * Date: 12-Jun-2012
+ * File: SingletonException.java
+ * Date: 14-Jun-2012
  *
  * This source code is part of Java Pathshala-Wisdom Being Shared.
  * This program is protected by copyright law but you are authorise to learn 
@@ -12,12 +12,21 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.adapter;
+package com.jp.design.pattern.create.singleton;
 
 /**
  * @author dimit.chadha
  */
-public interface ISqaurePeg {
+public class SingletonException extends RuntimeException {
 
-	public void insertIntoSquare(String msg);
+	private static final long serialVersionUID = 8591868570906908947L;
+
+	public SingletonException() {
+		super();
+	}
+
+	public SingletonException(String str) {
+		super(str);
+	}
+
 }

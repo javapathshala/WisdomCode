@@ -12,12 +12,12 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.singleton;
+package com.jp.design.pattern.create.singleton;
 
 /**
  * @author dimit.chadha
  */
-public class RunSingletonPattern {
+public class RunSingletonPatternBreak {
 
 	/**
 	 * @param args
@@ -26,14 +26,16 @@ public class RunSingletonPattern {
 		System.out.println("Creating SingleTon Pattern Instance");
 
 		try {
-			SingletonPatternBasic stp1 = SingletonPatternBasic.getInstance();
+			SingletonPatternBreak stp1 = SingletonPatternBreak.getInstance();
 			System.out.println("Fisrt Instance Created::" + stp1);
-			System.out.println("Creating Second Instance");
-			SingletonPatternBasic stp2 = SingletonPatternBasic.getInstance();
-			System.out.println("Second Instance can't be Created");
-			System.out.println("Second Instance Not Created::" + stp2);
+			System.out.println("Creating Second Instance by clonning");
+			SingletonPatternBreak clonedObject = (SingletonPatternBreak) stp1.clone();
+			System.out.println("Second Instance is created using clonning -> " + clonedObject);
 		} catch (SingletonException singletonException) {
 			System.out.println("Instance created is null ->-> Exception is -> " + singletonException.getMessage());
+		} catch (CloneNotSupportedException e) {
+			System.out.println("Clone of Object Restricted");
+			e.printStackTrace();
 		}
 	}
 

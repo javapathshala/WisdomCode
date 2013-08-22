@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jp.design.pattern.prototype;
+package com.jp.design.pattern.create.prototype;
 
 /**
  * @author dimit.chadha
