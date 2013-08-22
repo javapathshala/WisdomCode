@@ -1,5 +1,5 @@
 /*
- * File: NegativeProcessor.java
+ * File: TestCOR.java
  * Date: 02-Apr-2013
  *
  * This source code is part of Java Pathshala-Wisdom Being Shared.
@@ -12,24 +12,24 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.chainofresp;
+package com.jp.design.pattern.behaviour.chainofresp;
 
 /**
- * @author dimit.chadha This class is a link in chain series.
+ * @author dimit.chadha
  */
-public class NegativeProcessor implements Chain {
+public class TestCOR {
 
-	private Chain nextInChain;
-
-	public void setNext(Chain c) {
-		nextInChain = c;
-	}
-
-	public void process(NumberRequest request) {
-		if (request.getNumber() < 0) {
-			System.out.println("NegativeProcessor : " + request.getNumber());
-		} else {
-			nextInChain.process(request);
-		}
+	public static void main(String[] args) {
+		// configure Chain of Responsibility
+		Chain c1 = new NegativeProcessor();
+		Chain c2 = new ZeroProcessor();
+		Chain c3 = new PositiveProcessor();
+		c1.setNext(c2);
+		c2.setNext(c3);
+		// calling chain of responsibility
+		c1.process(new NumberRequest(99));
+		c1.process(new NumberRequest(-30));
+		c1.process(new NumberRequest(0));
+		c1.process(new NumberRequest(100));
 	}
 }

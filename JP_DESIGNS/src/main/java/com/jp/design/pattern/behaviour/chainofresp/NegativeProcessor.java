@@ -1,5 +1,5 @@
 /*
- * File: Chain.java
+ * File: NegativeProcessor.java
  * Date: 02-Apr-2013
  *
  * This source code is part of Java Pathshala-Wisdom Being Shared.
@@ -12,14 +12,24 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.chainofresp;
+package com.jp.design.pattern.behaviour.chainofresp;
 
 /**
- * @author dimit.chadha
+ * @author dimit.chadha This class is a link in chain series.
  */
-public interface Chain {
+public class NegativeProcessor implements Chain {
 
-	void setNext(Chain nextInChain);
+	private Chain nextInChain;
 
-	void process(NumberRequest request);
+	public void setNext(Chain c) {
+		nextInChain = c;
+	}
+
+	public void process(NumberRequest request) {
+		if (request.getNumber() < 0) {
+			System.out.println("NegativeProcessor : " + request.getNumber());
+		} else {
+			nextInChain.process(request);
+		}
+	}
 }

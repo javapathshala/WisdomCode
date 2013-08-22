@@ -12,7 +12,7 @@
  * 
  * Visit us at www.javapathshala.com
  */
-package com.jp.design.pattern.chainofresp;
+package com.jp.design.pattern.behaviour.chainofresp;
 
 
 /**

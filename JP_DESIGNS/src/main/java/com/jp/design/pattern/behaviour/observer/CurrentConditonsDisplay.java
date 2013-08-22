@@ -1,4 +1,4 @@
-package com.jp.design.pattern.observer;
+package com.jp.design.pattern.behaviour.observer;
 
 public class CurrentConditonsDisplay implements Observer,DisplayElement{
 	

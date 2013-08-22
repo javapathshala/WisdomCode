@@ -1,4 +1,4 @@
-package com.jp.design.pattern.command;
+package com.jp.design.pattern.behaviour.command;
 
 public class LightOffCommand implements Command {
 

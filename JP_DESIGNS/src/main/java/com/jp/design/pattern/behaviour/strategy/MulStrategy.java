@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jp.design.pattern.strategy;
+package com.jp.design.pattern.behaviour.strategy;
 
 /**
  * @author dimit.chadha
