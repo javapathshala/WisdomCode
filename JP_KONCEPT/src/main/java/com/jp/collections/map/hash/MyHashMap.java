@@ -8,7 +8,7 @@
  * obtain retention orders and to prosecute the authors of any infraction. Visit
  * us at www.javapathshala.com
  */
-package com.jp.collections.map.custom;
+package com.jp.collections.map.hash;
 
 /**
  * @author dchadha
