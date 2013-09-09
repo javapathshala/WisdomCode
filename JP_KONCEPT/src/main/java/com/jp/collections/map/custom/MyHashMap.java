@@ -13,7 +13,7 @@ package com.jp.collections.map.custom;
 /**
  * @author dchadha
  */
-public class MyHashMap {
+public class MyHashMap<K, V> {
 
 	private static final int SIZE = 16;
 	private Entry table[] = new Entry[SIZE];
@@ -22,14 +22,14 @@ public class MyHashMap {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MyHashMap myHashMap = new MyHashMap();
+		MyHashMap<String, String> myHashMap = new MyHashMap<String, String>();
 		myHashMap.put("key1", "value1");
 		myHashMap.put("key2", "value2");
 		myHashMap.put("key3", "value3");
 		myHashMap.put("key4", "value4");
 		myHashMap.put("key4", "value444");
-		Entry e = myHashMap.get("key4");
-        System.out.println(""+e.getValue());
+		Object e = myHashMap.get("key4");
+		System.out.println("" + e);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class MyHashMap {
 	 * Returns the entry associated with the specified key in the HashMap.
 	 * Returns null if the HashMap contains no mapping for the key.
 	 */
-	public Entry get(String k) {
+	public Object get(String k) {
 		int hash = k.hashCode() % SIZE;
 		Entry e = table[hash];
 
@@ -78,7 +78,7 @@ public class MyHashMap {
 		// see if element is present
 		while (e != null) {
 			if (e.key.equals(k)) {
-				return e;
+				return e.value;
 			}
 			e = e.next;
 		}
@@ -91,9 +91,10 @@ public class MyHashMap {
 	 * bucket with same hashcodes and different keys (collisions) using pointer
 	 * 'next'.
 	 * 
-	 * @author ntallapa
+	 * @author dchadha
+	 * 
 	 */
-	class Entry {
+	class Entry<K, V> {
 		final String key;
 		String value;
 		Entry next;
