@@ -22,6 +22,7 @@
 		<module>../HIBERNATE_APP</module>
 		<module>../HIBERNATE_CACHING</module>
 		<module>../JP_QUARTZ</module>
+		<module>SPRING_WS</module>
 	</modules>
 
 	<dependencies>
