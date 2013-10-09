@@ -26,7 +26,7 @@ public class ChannelIteratorImpl implements ChannelIterator {
 		this.channels = channelsList;
 	}
 
-	@Override
+	
 	public boolean hasNext() {
 		while (position < channels.size()) {
 			Channel c = channels.get(position);
@@ -38,7 +38,7 @@ public class ChannelIteratorImpl implements ChannelIterator {
 		return false;
 	}
 
-	@Override
+	
 	public Channel next() {
 		Channel c = channels.get(position);
 		position++;

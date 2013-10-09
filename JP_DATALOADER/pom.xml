@@ -10,11 +10,11 @@
   <name>Data Loader</name>
   <description>Data Loader</description>
   <dependencies>
-		<dependency>
+		<!-- dependency>
 			<groupId>com.infomata.data</groupId>
 			<artifactId>datafile</artifactId>
 			<version>1</version>
-		</dependency>
+		</dependency-->
 		  
 		<dependency>
 			<groupId>JAVA_PATHSHALA</groupId>

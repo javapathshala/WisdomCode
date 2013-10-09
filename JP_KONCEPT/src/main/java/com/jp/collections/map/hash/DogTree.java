@@ -29,7 +29,6 @@ public class DogTree implements Comparable<Object>{
 	}
 
 	
-	@Override
 	public int compareTo(Object o) {
 		return ((DogTree)this).size-((DogTree)o).size;
 	}

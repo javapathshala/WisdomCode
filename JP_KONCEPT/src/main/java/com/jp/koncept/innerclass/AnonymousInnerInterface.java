@@ -20,13 +20,12 @@ public class AnonymousInnerInterface {
 	 */
 	public static void main(String[] args) {
 		AnonInterface an = new AnonInterface() {
-
-			@Override
+			
 			public void dispaly() {
-				System.out.println("Data Displayed");
-
+				// TODO Auto-generated method stub
+				
 			}
-		};
+		}; 
 		
 		AnonymousInnerInterface in=new AnonymousInnerInterface();
 		

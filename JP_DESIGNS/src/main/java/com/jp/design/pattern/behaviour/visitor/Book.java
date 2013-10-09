@@ -30,7 +30,7 @@ public class Book implements ItemElement {
 		return isbnNumber;
 	}
 
-	@Override
+	
 	public int accept(ShoppingCartVisitor visitor) {
 		return visitor.visit(this);
 	}

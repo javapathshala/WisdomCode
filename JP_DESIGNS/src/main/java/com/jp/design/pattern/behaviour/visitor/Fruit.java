@@ -36,7 +36,7 @@ public class Fruit implements ItemElement {
 		return this.name;
 	}
 
-	@Override
+	
 	public int accept(ShoppingCartVisitor visitor) {
 		return visitor.visit(this);
 	}

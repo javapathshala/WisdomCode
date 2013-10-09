@@ -24,19 +24,19 @@ public class ChannelCollectionImpl implements ChannelCollection {
 	        channelsList = new ArrayList<Channel>();
 	    }
 
-	@Override
+	
 	public void addChannel(Channel c) {
 		this.channelsList.add(c);
 
 	}
 
-	@Override
+	
 	public void removeChannel(Channel c) {
 		  this.channelsList.remove(c);
 
 	}
 
-	@Override
+	
 	public ChannelIterator iterator(ChannelTypeEnum type) {
 		 return new ChannelIteratorImpl(type, this.channelsList);
 	}
