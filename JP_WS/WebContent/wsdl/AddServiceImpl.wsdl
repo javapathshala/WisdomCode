@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://impl.service.jp.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://impl.service.jp.com" xmlns:intf="http://impl.service.jp.com" xmlns:tns1="http://request.service.jp.com" xmlns:tns2="http://response.service.jp.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://impl.service.jp.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://request.service.jp.com"/>
+   <import namespace="http://response.service.jp.com"/>
+   <element name="doAdd">
+    <complexType>
+     <sequence>
+      <element name="numRequest" type="tns1:NumRequest"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="doAddResponse">
+    <complexType>
+     <sequence>
+      <element name="doAddReturn" type="tns2:NumResponse"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://request.service.jp.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://response.service.jp.com"/>
+   <complexType name="NumRequest">
+    <sequence>
+     <element name="num1" type="xsd:int"/>
+     <element name="num2" type="xsd:int"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://response.service.jp.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://request.service.jp.com"/>
+   <complexType name="NumResponse">
+    <sequence>
+     <element name="numResult" type="xsd:int"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="doAddResponse">
+
+      <wsdl:part element="impl:doAddResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="doAddRequest">
+
+      <wsdl:part element="impl:doAdd" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="AddServiceImpl">
+
+      <wsdl:operation name="doAdd">
+
+         <wsdl:input message="impl:doAddRequest" name="doAddRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:doAddResponse" name="doAddResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="AddServiceImplSoapBinding" type="impl:AddServiceImpl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="doAdd">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="doAddRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="doAddResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="AddServiceImplService">
+
+      <wsdl:port binding="impl:AddServiceImplSoapBinding" name="AddServiceImpl">
+
+         <wsdlsoap:address location="http://localhost:8080/JP_WS/services/AddServiceImpl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
