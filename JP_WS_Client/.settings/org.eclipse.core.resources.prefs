@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/com/jp/service/impl/AddServiceImpl.java=UTF-8
+encoding//src/com/jp/service/impl/AddServiceImplService.java=UTF-8
+encoding//src/com/jp/service/impl/AddServiceImplServiceLocator.java=UTF-8
+encoding//src/com/jp/service/impl/AddServiceImplSoapBindingStub.java=UTF-8
+encoding//src/com/jp/service/request/NumRequest.java=UTF-8
+encoding//src/com/jp/service/response/NumResponse.java=UTF-8
