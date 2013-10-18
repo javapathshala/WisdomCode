@@ -10,6 +10,7 @@
  */
 package com.jp.service.client.rpc.handler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,6 +51,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.rpc.handler.GenericHandler;
 import javax.xml.rpc.handler.MessageContext;
 import javax.xml.rpc.handler.soap.SOAPMessageContext;
+import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -95,7 +97,7 @@ public class XMLSignatureHandler extends GenericHandler {
 		try {
 			addXMLSignatures(ctx, message);
 		} catch (RequestSigningException requestSigningException) {
-			// //logger.error("Error while signing  request ",
+			// ////logger.error("Error while signing  request ",
 			// requestSigningException);
 			attacheErrorMessage(message, requestSigningException.getMessage());
 		}
@@ -123,20 +125,15 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @throws RequestSigningException
 	 */
 	private void addXMLSignatures(SOAPMessageContext context, SOAPMessage message) throws RequestSigningException {
+		// logger.info("Adding Header to SOAP Request");
 		try {
 			SOAPPart soapPart = message.getSOAPPart();
-
-			// SOAP Envelope
 			SOAPEnvelope soapEnvelope = createSoapEnvelope(soapPart);
-			// SOAP Header
 			createSoapHeader(soapEnvelope);
 			addSoapBody(soapEnvelope);
-
 			Node root = getRoot(soapPart);
-
-			// Create a DOM XMLSignatureFactory -Enveloped signature.
+			// logger.info("Creating DOM XMLSignatureFactory -Enveloped signature");
 			XMLSignatureFactory signFactory = XMLSignatureFactory.getInstance("DOM");
-
 			// <ds:SignedInfo>
 			SignedInfo signInfo = createSignInfo(signFactory);
 
@@ -145,8 +142,9 @@ public class XMLSignatureHandler extends GenericHandler {
 
 			// Create KeyInfo
 			KeyInfo keyInfo = createKeyInfo(signFactory, certificate);
-
-			XMLSignature signature = createXMLSign(signFactory, signInfo, keyInfo);
+			// get Signature
+			XMLSignature signature = createSignature(signFactory, signInfo, keyInfo);
+			// logger.info("Signature from Sign Info & Key Info objects created Successfully");
 
 			PrivateKey privateKey = getPrivateKey();
 			Element envelope = getFirstChildElement(root);
@@ -155,29 +153,13 @@ public class XMLSignatureHandler extends GenericHandler {
 			// Sign Message
 			signMessage(signature, privateKey, header);
 			dumpDocument(root);
-			// DOMValidateContext valContext = new
-			// DOMValidateContext(certificate.getPublicKey(), root);
-			// try {
-			// XMLSignature signature2 =
-			// signFactory.unmarshalXMLSignature(valContext);
-			// boolean coreValidity = signature.validate(valContext);
-			// System.out.println(coreValidity);
-			// } catch (MarshalException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// } catch (XMLSignatureException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-
 		} catch (TransformerException e) {
 			// logger.error("KeyStore File Not Found. " + e);
 		}
 	}
 
 	/**
-	 * Create a DOMSignContext and specify the RSA PrivateKey and location of
-	 * the resulting XMLSignature's parent element.
+	 * Create a DOMSignContext & Sign the message.
 	 * 
 	 * @param signature
 	 * @param privateKey
@@ -185,10 +167,11 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @throws RequestSigningException
 	 */
 	private void signMessage(XMLSignature signature, PrivateKey privateKey, Element header) throws RequestSigningException {
+		// logger.info("Start Signing the Message");
 		try {
 			DOMSignContext sigContext = new DOMSignContext(privateKey, header);
 			sigContext.putNamespacePrefix(XMLSignature.XMLNS, "ds");
-			sigContext.setIdAttributeNS(getNextSiblingElement(header), "http://schemas.xmlsoap.org/soap/security/2000-12", "id");
+			sigContext.setIdAttributeNS(getNextSiblingElement(header), "", "id");
 			signature.sign(sigContext);
 		} catch (MarshalException e) {
 			// logger.error("Exception occured during the XML marshalling or unmarshalling process.",
@@ -199,13 +182,17 @@ public class XMLSignatureHandler extends GenericHandler {
 			// e);
 			throw new RequestSigningException(e);
 		}
+		// logger.info("Message Signing Successful");
 	}
 
 	/**
+	 * Create SOAP Header
+	 * 
 	 * @param soapEnvelope
 	 * @throws SOAPException
 	 */
 	private void createSoapHeader(SOAPEnvelope soapEnvelope) throws RequestSigningException {
+		// logger.info("Creating SOAP Header");
 		SOAPHeader soapHeader;
 		try {
 			soapHeader = soapEnvelope.getHeader();
@@ -220,15 +207,18 @@ public class XMLSignatureHandler extends GenericHandler {
 			// e);
 			throw new RequestSigningException(e);
 		}
-
+		// logger.info("SOAP Header Created Successful");
 	}
 
 	/**
+	 * Modify SOAP Envelope
+	 * 
 	 * @param soapPart
 	 * @return
 	 * @throws SOAPException
 	 */
 	private SOAPEnvelope createSoapEnvelope(SOAPPart soapPart) throws RequestSigningException {
+		// logger.info("Creating SOAP Envelope");
 		SOAPEnvelope soapEnvelope = null;
 		try {
 			soapEnvelope = soapPart.getEnvelope();
@@ -238,26 +228,33 @@ public class XMLSignatureHandler extends GenericHandler {
 			// e);
 			throw new RequestSigningException(e);
 		}
+		// logger.info("SOAP Envelope Created Successful");
 		return soapEnvelope;
 	}
 
 	/**
+	 * Add Attribute to SOAP Body
+	 * 
 	 * @param soapEnvelope
 	 * @throws SOAPException
 	 */
 	private void addSoapBody(SOAPEnvelope soapEnvelope) throws RequestSigningException {
+		// logger.info("Adding Attribute to SOAP Body");
 		try {
 			SOAPBody soapBody = soapEnvelope.getBody();
-			soapBody.addAttribute(soapEnvelope.createName("id", "SOAP-SEC", "http://schemas.xmlsoap.org/soap/security/2000-12"), "Body");
+			Name createName = soapEnvelope.createName("id", "", "");
+			soapBody.addAttribute(createName, "Body");
 		} catch (SOAPException e) {
 			// logger.error("Exception occured while adding to SOAP Header	",
 			// e);
 			throw new RequestSigningException(e);
 		}
-
+		// logger.info("Adding Attribute to SOAP Body Successful");
 	}
 
 	/**
+	 * Get the Root Node of SOAP Request
+	 * 
 	 * @param soapPart
 	 * @return
 	 * @throws SOAPException
@@ -266,6 +263,7 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @throws IOException
 	 */
 	private Node getRoot(SOAPPart soapPart) throws RequestSigningException {
+		// logger.info("Get the root node of SOAP Request");
 		Source source;
 		Node root = null;
 		Document doc = null;
@@ -278,9 +276,7 @@ public class XMLSignatureHandler extends GenericHandler {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				dbf.setNamespaceAware(true);
 				DocumentBuilder db = null;
-
 				db = dbf.newDocumentBuilder();
-
 				doc = db.parse(inSource);
 				root = (Node) doc.getDocumentElement();
 			}
@@ -297,25 +293,48 @@ public class XMLSignatureHandler extends GenericHandler {
 			// logger.error("Exception due to IO", e);
 			throw new RequestSigningException(e);
 		}
-
+		// logger.info("Finished Getting Root Node of Request");
 		return root;
 	}
 
+	/**
+	 * Get the Private Key
+	 * 
+	 * @return
+	 */
 	private PrivateKey getPrivateKey() {
-		PrivateKey privateKey = keyEntry.getPrivateKey();
-		return privateKey;
+		return keyEntry.getPrivateKey();
 	}
 
-	private XMLSignature createXMLSign(XMLSignatureFactory signFactory, SignedInfo signInfo, KeyInfo keyInfo) {
+	/**
+	 * Create Signature from Sign Info & Key Info objects
+	 * 
+	 * @param signFactory
+	 * @param signInfo
+	 * @param keyInfo
+	 * @return
+	 */
+	private XMLSignature createSignature(XMLSignatureFactory signFactory, SignedInfo signInfo, KeyInfo keyInfo) {
+		// logger.info("Create Signature from Sign Info & Key Info objects");
 		return signFactory.newXMLSignature(signInfo, keyInfo);
 	}
 
+	/**
+	 * Create KeyInfo Object Tag
+	 * 
+	 * @param signFactory
+	 * @param certificate
+	 * @return
+	 * @throws RequestSigningException
+	 */
 	private KeyInfo createKeyInfo(XMLSignatureFactory signFactory, X509Certificate certificate) throws RequestSigningException {
+		// logger.info("Creation of KeyInfo Tag Started");
 		KeyInfo keyInfo = null;
 		try {
 			// Create the KeyInfo containing the X509Data.
 			KeyInfoFactory kif = signFactory.getKeyInfoFactory();
-			List<X509Certificate> x509Content = new ArrayList<X509Certificate>();
+			List<Object> x509Content = new ArrayList<Object>();
+			x509Content.add(certificate.getSubjectX500Principal().getName());
 			x509Content.add(certificate);
 			X509Data kv = kif.newX509Data(x509Content);
 			KeyValue kvalue = kif.newKeyValue(certificate.getPublicKey());
@@ -327,35 +346,38 @@ public class XMLSignatureHandler extends GenericHandler {
 			// logger.error("Exception occured in keystore key values", e);
 			throw new RequestSigningException(e);
 		}
+		// logger.info("Creation of KeyInfo Tag Successful");
 		return keyInfo;
 	}
 
 	/**
-	 * Create a Reference to the enveloped document (in this case, you are
-	 * signing the body, so a URI of "#Body" signifies that
+	 * Create a SignInfo Object Tag - Reference to the enveloped document (in
+	 * this case, you are signing the body, so a URI of "#Body" signifies that
 	 * 
 	 * @param signFactory
 	 * @return
 	 */
 	private SignedInfo createSignInfo(XMLSignatureFactory signFactory) throws RequestSigningException {
+		// logger.info("Creation of SignInfo Tag Started");
 		SignedInfo signedInfo = null;
 		try {
 			List<Transform> transformList = new ArrayList<Transform>();
-			Transform transform;
-
-			transform = signFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null);
-
+			Transform transform = signFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null);
+			transformList.add(transform);
+			transform = signFactory.newTransform(CanonicalizationMethod.INCLUSIVE_WITH_COMMENTS, (TransformParameterSpec) null);
 			transformList.add(transform);
 
-			transform = signFactory.newTransform(CanonicalizationMethod.INCLUSIVE, (TransformParameterSpec) null);
-			transformList.add(transform);
+			DigestMethod newDigestMethod = signFactory.newDigestMethod(DigestMethod.SHA1, null);
 
-			Reference ref = signFactory.newReference("#Body", signFactory.newDigestMethod(DigestMethod.SHA1, null), transformList, null,
-					null);
+			// Calculate Digest value on Soap Body
+
+			Reference ref = signFactory.newReference("#Body", newDigestMethod, transformList, null, null);
+
 			// Create the SignedInfo.
+			SignatureMethod newSignatureMethod = signFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null);
 			signedInfo = signFactory.newSignedInfo(
-					signFactory.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE, (C14NMethodParameterSpec) null),
-					signFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null), Collections.singletonList(ref));
+					signFactory.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE_WITH_COMMENTS, (C14NMethodParameterSpec) null),
+					newSignatureMethod, Collections.singletonList(ref));
 		} catch (NoSuchAlgorithmException e) {
 			// logger.error("Requested Cryptographic algorithm is not available in the environment",
 			// e);
@@ -364,6 +386,7 @@ public class XMLSignatureHandler extends GenericHandler {
 			// logger.error("invalid or inappropriate algorithm parameters", e);
 			throw new RequestSigningException(e);
 		}
+		// logger.info("Signed Info Tag Successful");
 		return signedInfo;
 	}
 
@@ -379,12 +402,13 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @throws UnrecoverableEntryException
 	 */
 	private X509Certificate readCertificate() throws RequestSigningException {
+		// logger.info("Reading Certificate");
 		KeyStore ks;
 		try {
 			ks = KeyStore.getInstance(KeyStore.getDefaultType());
-			// keyProperty= AdapterFrameworkConstants.PROPERTY_PLATFORM_PREFIX
-			// +"OneNDSSPML"+"."+"0006";
 			String keyStoreLocation = getKeyStoreLocation();
+			// BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
+			// basicTextEncryptor.setPassword(System.getProperty("APP_ENCRYPTION_PASSWORD"));
 			char[] keyPassword = getKeyPassword();
 			String keyAlias = getKeyAlias();
 			ks.load(new FileInputStream(keyStoreLocation), keyPassword);
@@ -407,7 +431,55 @@ public class XMLSignatureHandler extends GenericHandler {
 			// logger.error("Some issues with KeyEntry in Keystore", e);
 			throw new RequestSigningException(e);
 		}
+		// logger.info("Certificate Read  Successfully");
 		return (X509Certificate) keyEntry.getCertificate();
+	}
+
+	/**
+	 * Add Attribute to SOAP Envelope
+	 * 
+	 * @param soapEnvelope
+	 * @throws SOAPException
+	 */
+	private void addToSoapEnvelope(SOAPEnvelope soapEnvelope) throws SOAPException {
+		// logger.info("Add Attribute to SOAP Envelope");
+		soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:xsd"), "http://www.w3.org/2001/XMLSchema");
+		soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:xsi"), "http://www.w3.org/2001/XMLSchema-instance");
+		// logger.info("Adding Attribute to SOAP Envelope Successful");
+	}
+
+	/**
+	 * Print Response- Will be deleted from final version
+	 * 
+	 * @param context
+	 * @return
+	 * @throws RequestSigningException
+	 */
+	private String getStringMessage(SOAPMessageContext context) throws RequestSigningException {
+		String res = null;
+		try {
+			// SOAP Message
+			SOAPMessage message = context.getMessage();
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			message.writeTo(stream);
+			byte[] items = stream.toByteArray();
+			res = new String(items);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/**
+	 * Print SOAP Message - Will be deleted from final version
+	 * 
+	 * @param root
+	 * @throws TransformerException
+	 */
+	private void dumpDocument(Node root) throws TransformerException {
+		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.transform(new DOMSource(root), new StreamResult(System.out));
 	}
 
 	private String getKeyAlias() {
@@ -420,17 +492,6 @@ public class XMLSignatureHandler extends GenericHandler {
 
 	private String getKeyStoreLocation() {
 		return "D:\\certi\\Dimit.jks";
-	}
-
-	private void addToSoapEnvelope(SOAPEnvelope soapEnvelope) throws SOAPException {
-		soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:xsd"), "http://www.w3.org/2001/XMLSchema");
-		soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:xsi"), "http://www.w3.org/2001/XMLSchema-instance");
-	}
-
-	private void dumpDocument(Node root) throws TransformerException {
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.transform(new DOMSource(root), new StreamResult(System.out));
 	}
 
 	private Element getFirstChildElement(Node node) {
@@ -456,7 +517,7 @@ public class XMLSignatureHandler extends GenericHandler {
 			soapFault.setFaultString(cause);
 			// throw new SOAPFaultException(soapFault);
 		} catch (SOAPException e) {
-			// logger.info("Soap exception occures!");
+			// //logger.info("Soap exception occures!");
 		}
 	}
 }
