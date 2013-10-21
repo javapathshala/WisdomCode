@@ -23,7 +23,6 @@ public class AddServiceImplServiceLocator extends org.apache.axis.client.Service
 
     // Use to get a proxy class for AddServiceImpl
     private java.lang.String AddServiceImpl_address = "http://localhost:8080/JP_WS/services/AddServiceImpl";
-   // private java.lang.String AddServiceImpl_address = "https://localhost:8443/JP_WS/services/AddServiceImpl";
 
     public java.lang.String getAddServiceImplAddress() {
         return AddServiceImpl_address;

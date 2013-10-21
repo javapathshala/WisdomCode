@@ -10,10 +10,12 @@
  */
 package com.jp.service.client.rpc.handler;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyException;
 import java.security.KeyStore;
@@ -57,22 +59,31 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPHeaderElement;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.axis.Message;
+import org.apache.axis.utils.XMLUtils;
+import org.apache.xml.security.Init;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xml.internal.security.c14n.Canonicalizer;
 
 /**
  * @author dchadha
@@ -85,6 +96,7 @@ public class XMLSignatureHandler extends GenericHandler {
 
 	}
 
+	
 	@Override
 	public QName[] getHeaders() {
 		return null;
@@ -94,20 +106,68 @@ public class XMLSignatureHandler extends GenericHandler {
 	public boolean handleRequest(MessageContext context) {
 		SOAPMessageContext ctx = (SOAPMessageContext) context;
 		SOAPMessage message = ctx.getMessage();
+
+		org.apache.xml.security.Init.init();
 		try {
-			addXMLSignatures(ctx, message);
+
+			// //logger.info("Modifying Request for XML Signature Started..");
+			Document dd = addXMLSignatures(ctx, message);
+			SOAPMessage newMessage = getDocumentAsMessage(dd);
+
+			System.out.println(newMessage.getSOAPPart().getEnvelope().getHeader());
+
+			ctx.setMessage(newMessage);
+			// message.writeTo(System.out);
+
+			// ((org.apache.axis.SOAPPart)
+			// message.getSOAPPart()).setSOAPEnvelope((org.apache.axis.message.SOAPEnvelope)
+			// message.getSOAPPart()
+			// .getEnvelope());
+			// message.writeTo(System.out);
+
+			SOAPHeader sh = message.getSOAPPart().getEnvelope().getHeader();
+			// System.out.println("After saving #############");
+			// if (sh != null) {
+			// NodeList nl = sh.getChildNodes();
+			// int i = nl.getLength();
+			// for (int y = 0; y < i; y++) {
+			// Node item = nl.item(y);
+			// NodeList nl2 = item.getChildNodes();
+			// int i2 = nl.getLength();
+			// for (int x = 0; x < i2; x++) {
+			// System.out.println(nl2.item(x).getNodeName());
+			// }
+			//
+			// }
+			// }
+			validateCert validateCert = new validateCert();
+			validateCert.validateSignedMessage(dd);
+			// //logger.info("Modifying Request for XML Signature Ended..");
+
 		} catch (RequestSigningException requestSigningException) {
-			// ////logger.error("Error while signing  request ",
+			// //logger.error("Error while signing  request ",
 			// requestSigningException);
 			attacheErrorMessage(message, requestSigningException.getMessage());
+		} catch (SOAPException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		// System.out.println("SOAP Request: " + getStringMessage(context));
-		return super.handleRequest(context);
+		return true;// super.handleRequest(context);
+	}
+
+	protected final Message getDocumentAsMessage(Document document) {
+		// this.logger.info(new Object[] { "->" });
+
+		String xml = XMLUtils.DocumentToString(document);
+		Message message = new Message(xml, false);
+
+		// this.logger.info(new Object[] { "<-" });
+		return message;
 	}
 
 	@Override
 	public boolean handleResponse(MessageContext context) {
-		// System.out.println("SOAP Response: " + getStringMessage(context));
+		 System.out.println("SOAP Response: ");
 		return super.handleResponse(context);
 	}
 
@@ -124,38 +184,92 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @param message
 	 * @throws RequestSigningException
 	 */
-	private void addXMLSignatures(SOAPMessageContext context, SOAPMessage message) throws RequestSigningException {
+	private Document addXMLSignatures(SOAPMessageContext context, SOAPMessage message) throws RequestSigningException {
 		// logger.info("Adding Header to SOAP Request");
-		try {
-			SOAPPart soapPart = message.getSOAPPart();
-			SOAPEnvelope soapEnvelope = createSoapEnvelope(soapPart);
-			createSoapHeader(soapEnvelope);
-			addSoapBody(soapEnvelope);
-			Node root = getRoot(soapPart);
-			// logger.info("Creating DOM XMLSignatureFactory -Enveloped signature");
-			XMLSignatureFactory signFactory = XMLSignatureFactory.getInstance("DOM");
-			// <ds:SignedInfo>
-			SignedInfo signInfo = createSignInfo(signFactory);
+		SOAPPart soapPart = message.getSOAPPart();
+		populateSOAP(soapPart);
+		Node soapRequest = getUnSignedRequest(soapPart);
+		Init.init();
 
-			// Read X509 Certificate from KeyStore
-			X509Certificate certificate = readCertificate();
+		// logger.info("## SOAP Request ##");
+		// logger.info("################");
+		printRequest(soapRequest);
+		// //logger.info(soapRequest);
+		// logger.info("################");
+		// Document dd = createDocumentFromSOAP(soapRequest);
+		// Node root = (Node) dd.getDocumentElement();
+		// System.out.println("##################");
+		// printRequest(root);
+		// System.out.println("##################");
+		// System.out.println(dd.getFirstChild());
 
-			// Create KeyInfo
-			KeyInfo keyInfo = createKeyInfo(signFactory, certificate);
-			// get Signature
-			XMLSignature signature = createSignature(signFactory, signInfo, keyInfo);
-			// logger.info("Signature from Sign Info & Key Info objects created Successfully");
+		XMLSignatureFactory signFactory = XMLSignatureFactory.getInstance("DOM");
+		SignedInfo signInfo = createSignInfo(signFactory);
+		X509Certificate certificate = readCertificate();
+		System.out.println(certificate);
+		KeyInfo keyInfo = createKeyInfo(signFactory, certificate);
+		XMLSignature signature = createSignature(signFactory, signInfo, keyInfo);
 
-			PrivateKey privateKey = getPrivateKey();
-			Element envelope = getFirstChildElement(root);
-			Element header = getFirstChildElement(envelope);
+		// logger.info("Signature from Sign Info & Key Info objects created Successfully");
 
-			// Sign Message
-			signMessage(signature, privateKey, header);
-			dumpDocument(root);
-		} catch (TransformerException e) {
-			// logger.error("KeyStore File Not Found. " + e);
-		}
+		// Element envelope = getFirstChildElement(dd);
+		// System.out.println("Enveloper :: "+envelope);
+		//
+		// Element header = getFirstChildElement(envelope);
+		Element envelope = getFirstChildElement(soapRequest);
+		System.out.println("Enveloper :: " + envelope);
+
+		Element header = getFirstChildElement(envelope);
+		System.out.println("header :: " + header);
+		PrivateKey privateKey = getPrivateKey();
+		Element h = signMessage(signature, privateKey, header);
+
+		// //get header
+		//
+		// Element one=getFirstChildElement(soapRequest);
+
+		// printRequest(soapRequest);
+
+		Document dd = createDocumentFromSOAP(soapRequest);
+		printRequest(dd);
+		// try {
+		// SOAPEnvelope envelope2 = soapPart.getEnvelope();
+		// SOAPHeader sh = envelope2.getHeader();
+		// System.out.println("before saving #############");
+		// // if (sh != null) {
+		// // NodeList nl = sh.getChildNodes();
+		// // int i = nl.getLength();
+		// // for (int y = 0; y < i; y++) {
+		// // Node item = nl.item(y);
+		// // NodeList nl2 = item.getChildNodes();
+		// // int i2 = nl.getLength();
+		// // for (int x = 0; x < i2; x++) {
+		// // System.out.println(nl2.item(x).getNodeName());
+		// // }
+		// //
+		// // }
+		// // }
+		//
+		// // message.getSOAPHeader().detachNode();
+		// }
+		return dd;
+
+		// logger.info("################");
+
+	}
+
+	/**
+	 * Populate Request SOAP Message
+	 * 
+	 * @param soapPart
+	 * @throws RequestSigningException
+	 */
+	private void populateSOAP(SOAPPart soapPart) throws RequestSigningException {
+		// logger.info("Populate Request SOAP Message");
+		SOAPEnvelope soapEnvelope = createSoapEnvelope(soapPart);
+		createSoapHeader(soapEnvelope);
+		addSoapBody(soapEnvelope);
+		// logger.info("Request SOAP Message Completed");
 	}
 
 	/**
@@ -166,13 +280,14 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @param header
 	 * @throws RequestSigningException
 	 */
-	private void signMessage(XMLSignature signature, PrivateKey privateKey, Element header) throws RequestSigningException {
+	private Element signMessage(XMLSignature signature, PrivateKey privateKey, Element header) throws RequestSigningException {
 		// logger.info("Start Signing the Message");
 		try {
 			DOMSignContext sigContext = new DOMSignContext(privateKey, header);
 			sigContext.putNamespacePrefix(XMLSignature.XMLNS, "ds");
-			sigContext.setIdAttributeNS(getNextSiblingElement(header), "", "id");
+			sigContext.setIdAttributeNS(getNextSiblingElement(header), "", "Id");
 			signature.sign(sigContext);
+			// headerElement.appendChild(signature.);
 		} catch (MarshalException e) {
 			// logger.error("Exception occured during the XML marshalling or unmarshalling process.",
 			// e);
@@ -182,6 +297,7 @@ public class XMLSignatureHandler extends GenericHandler {
 			// e);
 			throw new RequestSigningException(e);
 		}
+		return header;
 		// logger.info("Message Signing Successful");
 	}
 
@@ -200,8 +316,13 @@ public class XMLSignatureHandler extends GenericHandler {
 				soapHeader = soapEnvelope.addHeader();
 			}
 			// SOAP Header Elements
-			soapHeader.addHeaderElement(soapEnvelope
-					.createName("Signature", "SOAP-SEC", "http://schemas.xmlsoap.org/soap/security/2000-12"));
+			SOAPHeaderElement addHeaderElement = soapHeader.addHeaderElement(soapEnvelope.createName("Signature", "SOAP-SEC",
+					"http://schemas.xmlsoap.org/soap/security/2000-12"));
+
+			// addHeaderElement.addChildElement(element);
+			// soapHeader.addHeaderElement(soapEnvelope.createName("Signature222222",
+			// "", ""));
+
 		} catch (SOAPException e) {
 			// logger.error("Exception occured while adding to SOAP Header	",
 			// e);
@@ -242,14 +363,20 @@ public class XMLSignatureHandler extends GenericHandler {
 		// logger.info("Adding Attribute to SOAP Body");
 		try {
 			SOAPBody soapBody = soapEnvelope.getBody();
-			Name createName = soapEnvelope.createName("id", "", "");
+			Name createName = soapEnvelope.createName("Id", "", "");
 			soapBody.addAttribute(createName, "Body");
+
+			// org.apache.xml.security.signature.XMLSignature xml = new
+			// org.apache.xml.security.signature.XMLSignature(
+			// (Element) soapBody.getFirstChild(), SignatureMethod.RSA_SHA1);
+			// soapBody.setIdAttribute("Id", Boolean.TRUE);
 		} catch (SOAPException e) {
 			// logger.error("Exception occured while adding to SOAP Header	",
 			// e);
 			throw new RequestSigningException(e);
 		}
 		// logger.info("Adding Attribute to SOAP Body Successful");
+
 	}
 
 	/**
@@ -262,23 +389,21 @@ public class XMLSignatureHandler extends GenericHandler {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	private Node getRoot(SOAPPart soapPart) throws RequestSigningException {
+	private Node getUnSignedRequest(SOAPPart soapPart) throws RequestSigningException {
 		// logger.info("Get the root node of SOAP Request");
 		Source source;
-		Node root = null;
+		Node soapRequest = null;
 		Document doc = null;
 		try {
 			source = soapPart.getContent();
 			if (source instanceof DOMSource) {
-				root = ((DOMSource) source).getNode();
+				soapRequest = ((DOMSource) source).getNode();
 			} else if (source instanceof SAXSource) {
 				InputSource inSource = ((SAXSource) source).getInputSource();
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				dbf.setNamespaceAware(true);
-				DocumentBuilder db = null;
-				db = dbf.newDocumentBuilder();
+				DocumentBuilderFactory dbf = getDocumentFactory();
+				DocumentBuilder db = getDocumentBuilder(dbf);
 				doc = db.parse(inSource);
-				root = (Node) doc.getDocumentElement();
+				soapRequest = (Node) doc.getDocumentElement();
 			}
 		} catch (SOAPException e) {
 			// logger.error("SOAP Exception occures !", e);
@@ -294,7 +419,29 @@ public class XMLSignatureHandler extends GenericHandler {
 			throw new RequestSigningException(e);
 		}
 		// logger.info("Finished Getting Root Node of Request");
-		return root;
+		return soapRequest;
+	}
+
+	/**
+	 * Get Document Factory
+	 * 
+	 * @return
+	 */
+	private DocumentBuilderFactory getDocumentFactory() {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		return dbf;
+	}
+
+	/**
+	 * Get Document Builder
+	 * 
+	 * @param dbf
+	 * @return
+	 * @throws ParserConfigurationException
+	 */
+	private DocumentBuilder getDocumentBuilder(DocumentBuilderFactory dbf) throws ParserConfigurationException {
+		return dbf.newDocumentBuilder();
 	}
 
 	/**
@@ -337,6 +484,7 @@ public class XMLSignatureHandler extends GenericHandler {
 			x509Content.add(certificate.getSubjectX500Principal().getName());
 			x509Content.add(certificate);
 			X509Data kv = kif.newX509Data(x509Content);
+			System.out.println("PUBLIC KEY IS :: " + certificate.getPublicKey());
 			KeyValue kvalue = kif.newKeyValue(certificate.getPublicKey());
 			List<Object> content = new ArrayList<Object>();
 			content.add(kv);
@@ -364,15 +512,11 @@ public class XMLSignatureHandler extends GenericHandler {
 			List<Transform> transformList = new ArrayList<Transform>();
 			Transform transform = signFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null);
 			transformList.add(transform);
-			transform = signFactory.newTransform(CanonicalizationMethod.INCLUSIVE_WITH_COMMENTS, (TransformParameterSpec) null);
+			transform = signFactory.newTransform(Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS, (TransformParameterSpec) null);
 			transformList.add(transform);
-
 			DigestMethod newDigestMethod = signFactory.newDigestMethod(DigestMethod.SHA1, null);
-
 			// Calculate Digest value on Soap Body
-
 			Reference ref = signFactory.newReference("#Body", newDigestMethod, transformList, null, null);
-
 			// Create the SignedInfo.
 			SignatureMethod newSignatureMethod = signFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null);
 			signedInfo = signFactory.newSignedInfo(
@@ -405,10 +549,9 @@ public class XMLSignatureHandler extends GenericHandler {
 		// logger.info("Reading Certificate");
 		KeyStore ks;
 		try {
+
 			ks = KeyStore.getInstance(KeyStore.getDefaultType());
 			String keyStoreLocation = getKeyStoreLocation();
-			// BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
-			// basicTextEncryptor.setPassword(System.getProperty("APP_ENCRYPTION_PASSWORD"));
 			char[] keyPassword = getKeyPassword();
 			String keyAlias = getKeyAlias();
 			ks.load(new FileInputStream(keyStoreLocation), keyPassword);
@@ -471,15 +614,137 @@ public class XMLSignatureHandler extends GenericHandler {
 	}
 
 	/**
+	 * Create Signed Document from SignedSOAP Message
+	 * 
+	 * @param soapRequest
+	 * @return
+	 * @throws RequestSigningException
+	 */
+	private Document createDocumentFromSOAP(Node soapRequest) throws RequestSigningException {
+		ByteArrayInputStream byteRequest = translateReqToStream(soapRequest);
+		DocumentBuilderFactory dbf = getDocumentFactory();
+		DocumentBuilder db;
+		Document signedDocument = null;
+		try {
+			db = getDocumentBuilder(dbf);
+			signedDocument = db.parse(byteRequest);
+		} catch (ParserConfigurationException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (SAXException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (IOException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		}
+		return signedDocument;
+	}
+
+	/**
+	 * Translate SOAP Request to Stream
+	 * 
+	 * @param soapRequest
+	 * @return
+	 * @throws RequestSigningException
+	 */
+	private ByteArrayInputStream translateReqToStream(Node soapRequest) throws RequestSigningException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.STANDALONE, "no");
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
+			Result outputTarget = new StreamResult(outputStream);
+			transformer.transform(new DOMSource(soapRequest), outputTarget);
+		} catch (TransformerConfigurationException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (TransformerFactoryConfigurationError e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (TransformerException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		}
+		return new ByteArrayInputStream(outputStream.toByteArray());
+	}
+
+	/**
 	 * Print SOAP Message - Will be deleted from final version
 	 * 
 	 * @param root
 	 * @throws TransformerException
 	 */
-	private void dumpDocument(Node root) throws TransformerException {
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.transform(new DOMSource(root), new StreamResult(System.out));
+	private void printRequest(Node soapRequest) throws RequestSigningException {
+
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "no");
+			transformer.setOutputProperty(OutputKeys.STANDALONE, "no");
+
+			StringWriter writer = new StringWriter();
+			transformer.transform(new DOMSource(soapRequest), new StreamResult(writer));
+			// String xml = writer.toString();
+			// logger.info(xml);
+			transformer.transform(new DOMSource(soapRequest), new StreamResult(System.out));
+		} catch (TransformerConfigurationException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (TransformerFactoryConfigurationError e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		} catch (TransformerException e) {
+			// logger.error(e.getMessage(), e);
+			throw new RequestSigningException(e);
+		}
+	}
+
+	/**
+	 * Get the first child
+	 * 
+	 * @param node
+	 * @return
+	 */
+	private Element getFirstChildElement(Node node) {
+		Node child = node.getFirstChild();
+		while ((child != null) && (child.getNodeType() != Node.ELEMENT_NODE)) {
+			child = child.getNextSibling();
+		}
+		return (Element) child;
+	}
+
+	/**
+	 * Get next sibling
+	 * 
+	 * @param node
+	 * @return
+	 */
+	private Element getNextSiblingElement(Node node) {
+		Node sibling = node.getNextSibling();
+		while ((sibling != null) && (sibling.getNodeType() != Node.ELEMENT_NODE)) {
+			sibling = sibling.getNextSibling();
+		}
+		return (Element) sibling;
+	}
+
+	/**
+	 * Adding SOAP Fault to SOAP Body
+	 * 
+	 * @param errorMessage
+	 * @param cause
+	 */
+	private void attacheErrorMessage(SOAPMessage errorMessage, String cause) {
+		// logger.info("Adding SOAP fault to SOAP Body");
+		try {
+			SOAPBody soapBody = errorMessage.getSOAPPart().getEnvelope().getBody();
+			SOAPFault soapFault = soapBody.addFault();
+			soapFault.setFaultString(cause);
+			// logger.error("SOAP FAULT: " + soapFault);
+			// logger.error("SOAP FAULT Cause: " + cause);
+			// throw new SOAPFaultException(soapFault);
+		} catch (SOAPException e) {
+			// logger.info("Soap exception occures!");
+		}
 	}
 
 	private String getKeyAlias() {
@@ -494,30 +759,4 @@ public class XMLSignatureHandler extends GenericHandler {
 		return "D:\\certi\\Dimit.jks";
 	}
 
-	private Element getFirstChildElement(Node node) {
-		Node child = node.getFirstChild();
-		while ((child != null) && (child.getNodeType() != Node.ELEMENT_NODE)) {
-			child = child.getNextSibling();
-		}
-		return (Element) child;
-	}
-
-	private Element getNextSiblingElement(Node node) {
-		Node sibling = node.getNextSibling();
-		while ((sibling != null) && (sibling.getNodeType() != Node.ELEMENT_NODE)) {
-			sibling = sibling.getNextSibling();
-		}
-		return (Element) sibling;
-	}
-
-	private void attacheErrorMessage(SOAPMessage errorMessage, String cause) {
-		try {
-			SOAPBody soapBody = errorMessage.getSOAPPart().getEnvelope().getBody();
-			SOAPFault soapFault = soapBody.addFault();
-			soapFault.setFaultString(cause);
-			// throw new SOAPFaultException(soapFault);
-		} catch (SOAPException e) {
-			// //logger.info("Soap exception occures!");
-		}
-	}
 }
