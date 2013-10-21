@@ -17,12 +17,20 @@ public class NumResponse {
 
 	private int numResult;
 
+	/**
+	 * @return the numResult
+	 */
 	public int getNumResult() {
 		return numResult;
 	}
 
+	/**
+	 * @param numResult the numResult to set
+	 */
 	public void setNumResult(int numResult) {
 		this.numResult = numResult;
 	}
+
+	
 
 }

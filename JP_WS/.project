@@ -3,6 +3,7 @@
 	<name>JP_WS</name>
 	<comment></comment>
 	<projects>
+		<project>JP_WS_Client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

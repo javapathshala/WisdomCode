@@ -10,6 +10,10 @@
  */
 package com.jp.service.impl;
 
+import javax.annotation.Resource;
+import javax.xml.rpc.handler.MessageContext;
+import javax.xml.ws.WebServiceContext;
+
 import com.jp.service.AddService;
 import com.jp.service.request.NumRequest;
 import com.jp.service.response.NumResponse;
@@ -18,9 +22,15 @@ import com.jp.service.response.NumResponse;
  * @author dchadha
  */
 public class AddServiceImpl implements AddService {
-
+	 @Resource
+	    WebServiceContext wsctx;
 	@Override
 	public NumResponse doAdd(NumRequest numRequest) {
+//		HandlerChain handlerChain = new HandlerChainImpl();
+//		HandlerInfo info = new HandlerInfo();
+//		info.setHandlerClass(WSServerHandler.class);
+//		handlerChain.add(info);
+	//	 MessageContext mctx = (MessageContext)wsctx.getMessageContext();
 		int result = numRequest.getNum1() + numRequest.getNum2();
 		NumResponse numResponse = new NumResponse();
 		numResponse.setNumResult(result);
