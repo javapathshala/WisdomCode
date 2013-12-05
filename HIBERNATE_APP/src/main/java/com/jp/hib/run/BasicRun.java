@@ -61,7 +61,7 @@ public class BasicRun {
 		}
 	}
 
-	private void AllRecords(Session session) {
+	public void AllRecords(Session session) {
 		session.beginTransaction();
 		List<Employee> employees = (List<Employee>) session.createQuery("FROM Employee").list();
 		session.getTransaction().commit();
@@ -104,7 +104,7 @@ public class BasicRun {
 	/**
 	 * 
 	 */
-	private void insertRecord(Session session) {
+	public void insertRecord(Session session) {
 		Employee insertEmp = new Employee();
 		insertEmp.setName("Dimit");
 		insertEmp.setAddress("Pragati");
