@@ -2,6 +2,7 @@
     <wb-module deploy-name="JP_JSF_WEB">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/properties"/>
         <property name="context-root" value="JP_JSF_WEB"/>
         <property name="java-output-path" value="/JP_JSF_WEB/build/classes"/>
     </wb-module>
