@@ -332,4 +332,43 @@ public class validateCert {
 		// System.out. "No Signature element was found" });
 		// return false;
 	}
+	
+	
+	
+	
 }
+
+//#####
+
+////Find Signature element
+//NodeList nl = signedDocument.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
+//
+//
+//
+//// Create a DOMValidateContext and specify a KeyValue KeySelector and document context
+//DOMValidateContext valContext = new DOMValidateContext(new KeyValueKeySelector(), nl.item(0)); 
+//
+//// Create a DOM XMLSignatureFactory that will be used to unmarshal the 
+//// document containing the XMLSignature 
+//XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
+//
+//// unmarshal the XMLSignature
+//XMLSignature signature = fac.unmarshalXMLSignature(valContext);
+//
+//boolean coreValidity = signature.validate(valContext);                                      
+//
+//// Check core validation status
+//if (coreValidity == false) {
+//    System.out.println("Signature failed core validation"); 
+//    boolean sv = signature.getSignatureValue().validate(valContext);
+//    System.out.println("signature validation status: " + sv);
+//    // check the validation status of each Reference
+//    Iterator i = signature.getSignedInfo().getReferences().iterator();
+//    for (int j=0; i.hasNext(); j++) {
+//        Reference ref = (Reference) i.next();
+//        boolean refValid = ref.validate(valContext);
+//        System.out.println("ref["+j+"] validity status: " + refValid);
+//    }
+//} else {
+//    System.out.println("Signature passed core validation");
+//}

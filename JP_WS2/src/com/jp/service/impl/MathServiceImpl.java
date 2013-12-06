@@ -12,6 +12,9 @@ import com.jp.service.response.MathResponse;
 
 public class MathServiceImpl implements MathService {
 
+	static{
+		System.out.println("########################Loader###############################");
+	}
 	@Override
 	public MathResponse doAdd(MathRequest mathRequest) {
 
