@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="JP_SEAM_APP">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="JP_SEAM_WEB.war" deploy-path="/" handle="module:/resource/JP_SEAM_WEB/JP_SEAM_WEB">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jboss-el.jar" deploy-path="/lib" handle="module:/classpath/lib/JP_SEAM_APP/lib/jboss-el.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jboss-seam.jar" deploy-path="/" handle="module:/classpath/lib/JP_SEAM_APP/lib/jboss-seam.jar">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="JP_SEAM_EJB.jar" deploy-path="/" handle="module:/resource/JP_SEAM_EJB/JP_SEAM_EJB">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
