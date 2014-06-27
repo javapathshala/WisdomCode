@@ -14,6 +14,10 @@
  */
 package com.jp.spring.aop.basic;
 
+import java.io.IOException;
+
+import com.jp.spring.aop.basic.test.hello;
+
 /**
  * @author dimit.chadha
  */
@@ -26,8 +30,15 @@ public class ShapeService {
 	/**
 	 * @return the circleModel
 	 */
-	public CircleModel getCircleModel() {
-		return circleModel;
+	public String getCircleModel(String aa) {
+		test();
+		return "Good "+aa;//circleModel;
+	}
+
+	public void test() {
+		System.out.println("in test");
+		hello hello1=new hello();
+		hello1.testing();
 	}
 
 	/**
@@ -41,8 +52,12 @@ public class ShapeService {
 	/**
 	 * @return the triangleModel
 	 */
-	public TriangleModel getTriangleModel() {
-		return triangleModel;
+	public String getTriangleModel() {
+		int aa=1;
+//		if (aa!=2){
+//			throw new IOException("I am gone!");
+//		}
+		return "triangle";//triangleModel;
 	}
 
 	/**

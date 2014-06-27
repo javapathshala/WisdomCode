@@ -3,13 +3,13 @@
 <beans>
 
 	<!--Bean Class -->
-	<bean id="beanTarget" class="BeforeAfterAOP.BussinessLogicImpl" />
+	<bean id="beanTarget" class="com.jp.spring.aop.types.BussinessLogicImpl" />
 
 	<!-- Advice Class-->
-	<bean id="theTracingBeforeAdvice" class="BeforeAfterAOP.TracingBeforeAdvice" />
-	<bean id="theTracingAfterAdvice" class="BeforeAfterAOP.TracingAfterAdvice" />
-	<!-- bean id="theTracingThrowAdvice" class="BeforeAfterAOP.TracingThrowAdvice" /-->
-	<!-- bean id="theTracingAroundAdvice" class="BeforeAfterAOP.TracingAroundAdvice" /-->
+	<!-- bean id="theTracingBeforeAdvice" class="com.jp.spring.aop.types.TracingBeforeAdvice" />
+	<bean id="theTracingAfterAdvice" class="com.jp.spring.aop.types.TracingAfterAdvice" />
+	<bean id="theTracingThrowAdvice" class="BeforeAfterAOP.TracingThrowAdvice" /-->
+	<bean id="theTracingAroundAdvice" class="com.jp.spring.aop.types.TracingAroundAdvice" />
 	
 
 
@@ -17,17 +17,17 @@
 	
 	<bean id="BusinessLogicBean" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="proxyInterfaces">
-			<value>BeforeAfterAOP.BussinessInterface</value>
+			<value>com.jp.spring.aop.types.BussinessInterface</value>
 		</property>
 		<property name="target">
 			<ref local="beanTarget" />
 		</property>
 		<property name="interceptorNames">
 			<list>
-				<value>theTracingBeforeAdvice</value>
+				<!-- value>theTracingBeforeAdvice</value>
 				<value>theTracingAfterAdvice</value>				
-				<!-- value>theTracingThrowAdvice</value-->
-				<!--value>theTracingAroundAdvice</value-->
+				<value>theTracingThrowAdvice</value-->
+				<value>theTracingAroundAdvice</value>
 			</list>
 		</property>
 	</bean>

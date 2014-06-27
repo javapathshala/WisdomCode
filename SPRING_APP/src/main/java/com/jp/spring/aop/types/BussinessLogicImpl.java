@@ -20,8 +20,14 @@ public class BussinessLogicImpl implements BussinessInterface {
 	public void bussinessMethod() throws Exception {
 		System.out.println("Business Method Callled :::  ");
 		System.out.println("Inside Business Method :::  ");
+		test("dimit");
 //		if(true){
 //			throw new Exception();
 //		}
+	}
+
+	public void test(String string) {
+		System.out.println("Hello "+string);
+		
 	}
 }

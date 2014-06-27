@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="SPRING_WEB">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="JP_COMMON.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_COMMON/JP_COMMON">
+        <dependent-module archiveName="SPRING_APP-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/SPRING_APP/SPRING_APP">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="JP_DATALOADER.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_DATALOADER/JP_DATALOADER">
+        <dependent-module archiveName="JP_COMMON-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_COMMON/JP_COMMON">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="SPRING_APP.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/SPRING_APP/SPRING_APP">
+        <dependent-module archiveName="JP_DATALOADER-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_DATALOADER/JP_DATALOADER">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="JP_LUCENE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_LUCENE/JP_LUCENE">
+        <dependent-module archiveName="JP_LUCENE-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JP_LUCENE/JP_LUCENE">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="SPRING_WEB"/>

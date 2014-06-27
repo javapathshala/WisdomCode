@@ -43,26 +43,26 @@ public class FtpTransferSun {
 		// String filename = path.substring(lastSlash+1);
 		// String directory = path.substring(0,lastSlash);
 
-		FtpClient ftpClient = new FtpClient();
-		try {
-
-			ftpClient.openServer(server);
-			ftpClient.login(username, password);
-			ftpClient.cd("SanareIntegrationBroker//TestCSV");
-			ftpClient.binary();
-
-			TelnetOutputStream netOut = ftpClient.put("D:\\FCF_ET\\Test.csv");
-			File file = new File("D:\\FCF_ET\\Test.csv");
-			// Now transfer the file contents
-			ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(file));
-			byte c[] = new byte[1000];
-			int read = 0;
-			while ((read = fileIn.read(c)) != -1) {
-				netOut.write(c, 0, read);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		FtpClient ftpClient = new FtpClient();
+//		try {
+//
+//			ftpClient.openServer(server);
+//			ftpClient.login(username, password);
+//			ftpClient.cd("SanareIntegrationBroker//TestCSV");
+//			ftpClient.binary();
+//
+//			TelnetOutputStream netOut = ftpClient.put("D:\\FCF_ET\\Test.csv");
+//			File file = new File("D:\\FCF_ET\\Test.csv");
+//			// Now transfer the file contents
+//			ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(file));
+//			byte c[] = new byte[1000];
+//			int read = 0;
+//			while ((read = fileIn.read(c)) != -1) {
+//				netOut.write(c, 0, read);
+//			}
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }

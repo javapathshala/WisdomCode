@@ -22,4 +22,25 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 	<bean id="shapeService" class="com.jp.spring.aop.basic.ShapeService" autowire="byName" />
 	
 	<bean name="LoggingAspect"  class="com.jp.spring.aop.basic.LoggingAspect"/>
+	
+	
+	<bean name="traceInterceptor" class="com.jp.spring.aop.basic.MyTrace" dependency-check="none">
+    <property name="enterMessage" value="ENTER: $[targetClassShortName].$[methodName]($[arguments])"/>
+    <property name="exitMessage"
+              value="EXIT: $[targetClassShortName].$[methodName]() : $[invocationTime]ms : $[returnValue]"/>
+</bean>
+ 
+<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator" dependency-check="none">
+    <property name="beanNames" value="*RequestListener,*Notifier"/>
+    <property name="proxyTargetClass" value="true"/>
+    <property name="interceptorNames">
+        <list>
+            <value>traceInterceptor</value>
+        </list>
+    </property>
+ 
+    <property name="order" value="2"/>
+</bean>
+	
+	
 </beans>

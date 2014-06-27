@@ -14,6 +14,8 @@
  */
 package com.jp.spring.aop.basic;
 
+import java.io.IOException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -28,8 +30,15 @@ public class AopRun {
 	public static void main(String[] args) {
 		ApplicationContext context = new FileSystemXmlApplicationContext("../SPRING_APP/properties/aopConfig.xml");
 		ShapeService shapeService = context.getBean("shapeService", ShapeService.class);
-		System.out.println(shapeService.getCircleModel().getName());
+		System.out.println(shapeService.getTriangleModel());
+		System.out.println(shapeService.getCircleModel("dimit"));
+		//shapeService.test();
+//		try {
+//			System.out.println(shapeService.getTriangleModel());
+//		} catch (IOException e) {
+//			
+//		}
 		//System.out.println(shapeService.getTriangleModel().getName());
-		System.out.println(shapeService.getAll(3));
+		//System.out.println(shapeService.getAll(3));
 	}
 }

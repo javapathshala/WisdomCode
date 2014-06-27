@@ -20,7 +20,7 @@ public class BusinessApp {
 	public static void main(String[] args) {
 
 		ApplicationContext apctx = new FileSystemXmlApplicationContext(
-				"../Spring FrameWork/properties/BeforeAOPConfig.xml");
+				"../SPRING_APP/properties/BeforeAOPConfig.xml");
 		BussinessInterface bInterface = (BussinessInterface) apctx
 				.getBean("BusinessLogicBean");
 		try {
